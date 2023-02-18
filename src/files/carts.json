@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "alias": "carrito1",
+    "products": [
+      {
+        "product": "producto 2",
+        "quantity": 5
+      },
+      {
+        "product": "producto 1",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "alias": "carrito2",
+    "products": [
+      {
+        "product": "producto 5",
+        "quantity": 2
+      },
+      {
+        "product": "producto 10",
+        "quantity": 3
+      }
+    ]
+  },
+]

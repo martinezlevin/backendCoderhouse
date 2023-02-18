@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "title": "producto 1",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "1q",
+    "stock": 100
+  },
+  {
+    "id": 2,
+    "title": "producto 2",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "2w",
+    "stock": 100
+  },
+  {
+    "id": 3,
+    "title": "producto 3",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "3e",
+    "stock": 100
+  },
+  {
+    "id": 4,
+    "title": "producto 4",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "4r",
+    "stock": 100
+  },
+  {
+    "id": 5,
+    "title": "producto 5",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "5t",
+    "stock": 100
+  },
+  {
+    "id": 6,
+    "title": "producto 6",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "6y",
+    "stock": 100
+  },
+  {
+    "id": 7,
+    "title": "producto 7",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "7u",
+    "stock": 100
+  },
+  {
+    "id": 8,
+    "title": "producto 8",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "8i",
+    "stock": 100
+  },
+  {
+    "id": 9,
+    "title": "producto 9",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "9o",
+    "stock": 100
+  },
+  {
+    "id": 10,
+    "title": "producto 10",
+    "description": "Producto de ejemplo",
+    "price": 5000,
+    "thumbnail": "Sin imagen",
+    "code": "0p",
+    "stock": 100
+  }
+]
