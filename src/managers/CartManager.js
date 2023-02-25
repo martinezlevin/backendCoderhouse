@@ -9,6 +9,13 @@ class Cart {
   }
 }
 
+class CartItem {
+  constructor(productID, quantity = 1) {
+    this.product = productID;
+    this.quantity = quantity;
+  }
+}
+
 export default class CartManager {
   constructor(path) {
     this.path = path;
@@ -28,41 +35,40 @@ export default class CartManager {
   async addCart(req, res) {
     let carts = await this.getCarts();
     let newCart = new Cart(createID(), req.query.alias);
-    ///Aclaración: Pense en agregarle un alias para identificar al cart de forma personalizada.
+    carts.push(newCart);
     await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
-    res.setHeader("Content-Type", "application/json");
-    res.status(201).json({ message: `Cart created successfully` });
+    return res.status(201).json({ message: "Carrito creado con éxito" });
   }
 
   async getCart(req, res) {
+    res.setHeader("Content-Type", "application/json");
     let carts = await this.getCarts();
     let cart = carts.find((cart) => cart.id === req.params.cid);
-    res.setHeader("Content-Type", "application/json");
     if (cart) {
-      res.status(200).json({ cart });
+      return res.status(200).json({ cart });
     } else {
-      res.status(400).json({ error: "Carrito no encontrado." });
+      return res.status(400).json({ error: "Carrito no encontrado." });
     }
   }
 
   async addProduct(req, res) {
-    let carts = await this.getCarts();
-    let cartIndex = carts.findIndex(cart => cart.id === req.params.cid);
-    let cartExists = cartIndex !== -1;
     res.setHeader("Content-Type", "application/json");
+    let carts = await this.getCarts();
+    let cartIndex = carts.findIndex((cart) => cart.id === req.params.cid);
+    let cartExists = cartIndex !== -1;
     if (cartExists) {
-      let prodIndex = carts[cartIndex].products.findIndex(item => item.product === req.params.pid);
-      console.log(prodIndex);
+      let prodIndex = carts[cartIndex].products.findIndex((item) => item.product === req.params.pid);
       let prodExists = prodIndex !== -1;
       if (prodExists) {
-        carts[cartIndex].products[prodIndex].quantity++
+        carts[cartIndex].products[prodIndex].quantity++;
       } else {
-        carts[cartIndex].products.push({product: req.params.pid, quantity: 1})
+        let cartItem = new CartItem(req.params.pid);
+        carts[cartIndex].products.push(cartItem);
       }
       await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
-      res.status(201).json({ message: `Producto añadido con éxito` });
+      return res.status(201).json({ message: "Producto añadido con éxito." });
     } else {
-      res.status(400).json({ error: "Carrito no encontrado." });
+      return res.status(400).json({ error: "Carrito no encontrado." });
     }
   }
 }
