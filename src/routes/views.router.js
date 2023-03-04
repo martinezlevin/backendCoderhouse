@@ -11,7 +11,8 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-  res.render("realTimeProducts", { style: "realTimeProducts.css" });
+  let products = await pm.getProducts(req.query.limit);
+  res.render("realTimeProducts", { products, style: "realTimeProducts.css" });
 });
 
 export default router;

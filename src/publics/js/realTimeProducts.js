@@ -1,48 +1,60 @@
-import express from "express";
-import { engine } from "express-handlebars";
-import { Server } from "socket.io";
+const socket = io();
 
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
-import viewsRouter from "./routes/views.router.js";
-import ProductManager from "./managers/ProductManager.js";
-import { __dirname } from "./helpers/utils.js";
+let addProductForm = document.getElementById("addProductForm");
+let deleteProductForm = document.getElementById("deleteProductForm");
+let toast = document.getElementById("toast");
 
-const app = express();
-const port = 8080;
-const pm = new ProductManager(`${__dirname}/files/products.json`);
-
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", `${__dirname}/views`);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static(`${__dirname}/public`));
-app.use("/", viewsRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
-
-const httpServer = app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+deleteProductForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let id = e.target[0].value.trim();
+  socket.emit("deleteProduct", id);
+  e.target.reset();
 });
 
-const io = new Server(httpServer);
+addProductForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let product = {
+    title: e.target[0].value.trim(),
+    description: e.target[1].value.trim(),
+    code: e.target[2].value.trim(),
+    price: e.target[3].value.trim(),
+    status: e.target[4].value.trim(),
+    stock: e.target[5].value.trim(),
+    category: e.target[6].value.trim(),
+    thumbnails: [e.target[7].value.trim(), e.target[8].value.trim()],
+  };
+  socket.emit("addProduct", product);
+  e.target.reset();
+});
 
-io.on("connection", async (socket) => {
-  console.log("New client connected");
+const showToast = (message) => {
+  toast.innerHTML = message;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 2000);
+}
 
-  let products = await pm.getProducts();
-  socket.emit("products", products);
+window.addEventListener('load', () => showToast('Lista actualizada!'))
 
-  socket.on("deleteProduct", async (id) => {
-    let response = await pm.deleteProductSocket(id);
-    socket.emit("deleteProductRes", response);
-  });
+socket.on("productListUpdated", () => {
+  location.reload();
+});
 
-  socket.on("addProduct", async (product) => {
-    let response = await pm.addProductSocket(product);
-    socket.emit("addProductRes", response);
-  });
+socket.on("addProductRes", (response) => {
+  showToast(response.message);
+  if (response.success) {
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
+});
+
+socket.on("deleteProductRes", (response) => {
+  showToast(response.message);
+  if (response.success) {
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
 });

@@ -1,3 +1,25 @@
 h1 {
     color: rgb(rgb(255, 77, 0));
   }
+  
+  #toast {
+    font-size: 2rem;
+    background-color: green;
+    display: none;
+    animation: fade-out 3000ms ease forwards;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  
+  @keyframes fade-out {
+    50% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+  }
