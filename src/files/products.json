@@ -267,16 +267,16 @@
   },
   {
     "id": "2f102f78-7db3-4a64-8499-f10a37c5bd73",
-    "title": "title_20",
-    "description": "description_20",
-    "code": "code_20",
-    "price": 10.5,
-    "status": true,
-    "stock": 100,
-    "category": "cat_e",
+    "title": "title_20_mod",
+    "description": "description_20_mod",
+    "code": "code_20_mod",
+    "price": 10.58,
+    "status": false,
+    "stock": 10002,
+    "category": "cat_e_mod",
     "thumbnails": [
-      "thumb_1",
-      "thumb_2"
+      "thumb_1_mod^",
+      "thumb_2_mod"
     ]
   }
 ]

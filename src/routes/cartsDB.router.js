@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { __dirname } from "../helpers/utils.js";
-import CartManager from "../managers/CartManager.js";
-import path from "path";
+import CartManagerDB from "../dao/cartManagerDB.js";
 
 const router = Router();
-const cm = new CartManager(path.join(__dirname, "../files/carts.json"));
+const cm = new CartManagerDB;
 
 router.post("/", (req, res) => cm.addCart(req, res));
 

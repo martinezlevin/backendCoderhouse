@@ -38,28 +38,26 @@ export default class ProductManager {
     if (product) {
       return res.status(200).json({ product });
     } else {
-      return res.status(400).json({ error: "Product not found." });
+      return res.status(400).json({ error: "Producto no encontrado." });
     }
   }
 
   async addProduct(req, res) {
-    res.setHeader("Content-Type", "application/json");
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
     let products = await this.getProducts();
     let productExists = products.findIndex((product) => product.code === code) !== -1;
     if (productExists) {
-      return res.status(400).json({ error: "Product not added. Error: Code already exists." });
+      return res.status(400).json({ error: "Producto no añadido. Error: el código ya existe." });
     } else {
       let id = createID();
       let newProduct = new Product(id, title, description, code, price, status, stock, category, thumbnails);
       products.push(newProduct);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ message: `Product added successfully` });
+      return res.status(201).json({ message: "Producto añadido con éxito" });
     }
   }
 
   async updateProduct(req, res) {
-    res.setHeader("Content-Type", "application/json");
     let id = req.params.pid;
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
     let products = await this.getProducts();
@@ -69,12 +67,10 @@ export default class ProductManager {
       let indexByCode = products.findIndex((product) => product.code === code);
       let codeExists = indexByCode !== indexByID && indexByCode !== -1;
       if (codeExists) {
-        return res.status(400).json({ error: "Invalid code, already exists" });
+        return res.status(400).json({ error: "Código no válido, ya existe" });
       } else {
-        price = Number(price);
-        stock = Number(stock);
-        status === "false" && (products[indexByID].status = false);
-        status === "true" && (products[indexByID].status = true);
+        status === false && (products[indexByID].status = false);
+        status === true && (products[indexByID].status = true);
         title && (products[indexByID].title = title);
         description && (products[indexByID].description = description);
         code && (products[indexByID].code = code);
@@ -83,10 +79,10 @@ export default class ProductManager {
         category && (products[indexByID].category = category);
         thumbnails && (products[indexByID].thumbnails = thumbnails);
         await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-        return res.status(201).json({ message: "Product updated successfully" });
+        return res.status(201).json({ message: "Producto actualizado con éxito" });
       }
     } else {
-      return res.status(400).json({ error: "Product not found" });
+      return res.status(400).json({ error: "Producto no encontrado." });
     }
   }
 
@@ -99,9 +95,9 @@ export default class ProductManager {
     if (productExists) {
       products.splice(productIndex, 1);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ message: `Product deleted successfully` });
+      return res.status(201).json({ message: "Producto eliminado con éxito." });
     } else {
-      return res.status(400).json({ error: "Product not found." });
+      return res.status(400).json({ error: "Producto no encontrado." });
     }
   }
 
@@ -114,12 +110,12 @@ export default class ProductManager {
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
       return {
         success: true,
-        message: "Product deleted successfully",
+        message: "Producto eliminado con éxito.",
       };
     } else {
       return {
         success: false,
-        message: "Product not found",
+        message: "Producto no encontrado.",
       };
     }
   }
@@ -132,8 +128,8 @@ export default class ProductManager {
     if (productExists || aFieldIsEmpty) {
       return {
         success: false,
-        message: `Product not added. Errors:${productExists ? " Product already exists." : ""}${
-          aFieldIsEmpty ? " Must complete all required fields." : ""
+        message: `Producto no añadido. errores:${productExists ? "El producto ya existe." : ""}${
+          aFieldIsEmpty ? "Debe completar todos los campos requeridos." : ""
         }`,
       };
     } else {
@@ -146,7 +142,7 @@ export default class ProductManager {
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
       return {
         success: true,
-        message: "Product added successfully",
+        message: "Producto agregado con éxito.",
       };
     }
   }
