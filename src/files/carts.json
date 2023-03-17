@@ -1,3 +1,4 @@
+
 [
   {
     "id": "5f7927f4-6d19-42a6-a8e6-8fdd739f90bd",
@@ -61,6 +62,21 @@
     "products": [
       {
         "product": "ca34321c-05fc-4950-84ce-21185ed64010",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "dfbe4ac5-cecf-4a8e-ac60-b7f9b2caab31",
+    "alias": "my cart 6",
+    "products": []
+  },
+  {
+    "id": "fea740d2-a5b5-4546-913e-2d3eaf5f0ce5",
+    "alias": "my cart 6",
+    "products": [
+      {
+        "product": "d2a47d43-bf9d-461c-ab62-cd3458810763",
         "quantity": 1
       }
     ]

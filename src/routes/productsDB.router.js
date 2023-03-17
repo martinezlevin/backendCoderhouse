@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { __dirname } from "../helpers/utils.js";
-import ProductManagerFS from "../dao/productManagerFS.js";
+import productManagerDB from "../dao/productManagerDB.js";
 import { addProductMid, updateProductMid } from "../middlewares/products.middlewares.js";
-import path from "path";
 
 const router = Router();
-const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
+const pm = new productManagerDB;
 
 router.get("/", async (req, res) => {
   let products = await pm.getProducts(req.query.limit);

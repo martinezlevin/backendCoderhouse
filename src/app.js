@@ -4,17 +4,18 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import path from "path";
 
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
+import productsFSRouter from "./routes/products.router.js";
+import cartsFSRouter from "./routes/carts.router.js";
 import cartsDBRouter from "./routes/cartsDB.router.js";
+import productsDBRouter from "./routes/productsDB.router.js";
 import viewsRouter from "./routes/views.router.js";
-import ProductManager from "./managers/ProductManager.js";
+import ProductManagerFS from "./dao/productManagerFS.js";
 import { __dirname } from "./helpers/utils.js";
 import { messagesModel } from "./dao/models/messages.model.js";
 
 const app = express();
 const port = 8080;
-const pm = new ProductManager(path.join(__dirname, "../files/products.json"));
+const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -25,9 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+app.use("/api/productsFS", productsFSRouter);
+app.use("/api/cartsFS", cartsFSRouter);
 app.use("/api/cartsDB", cartsDBRouter);
+app.use("/api/productsDB", productsDBRouter);
 
 const httpServer = app.listen(port, () => {
   console.log(`App listening on port ${port}`);
@@ -72,5 +74,4 @@ const connect = async () => {
 
 connect();
 
-//httpServer.on("error", (error) => console.error(error));
 io.on("error", (error) => console.error(error));
