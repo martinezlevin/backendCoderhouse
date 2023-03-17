@@ -1,9 +1,6 @@
 import { cartsModel } from "./models/carts.model.js";
 
 export default class CartManagerDB {
-  /* constructor(path) {
-    this.path = path;
-  } */
 
   async getCarts() {
     let carts = await cartsModel.find();
