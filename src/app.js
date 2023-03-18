@@ -34,7 +34,7 @@ app.use("/api/cartsDB", cartsDBRouter);
 app.use("/api/productsDB", productsDBRouter);
 
 const httpServer = app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`Aplicación escuchando en el puerto ${port}`);
 });
 
 const io = new Server(httpServer);
@@ -66,10 +66,10 @@ io.on("connection", async (socket) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect("");
-    console.log("DB connection success");
+    await mongoose.connect("mongodb://localhost:27017");///me falta vincular mongo despues del cambio de OS a la pc
+    console.log("Conexión a DB establecida");
   } catch (error) {
-    console.log(`DB connection fail. Error: ${error}`);
+    console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);
   }
 }
 
