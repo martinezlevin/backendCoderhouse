@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { __dirname } from "../helpers/utils.js";
-import ProductManager from "../managers/ProductManager.js";
+import ProductManagerFS from "../dao/productManagerFS.js";
 import path from "path";
 import { messagesModel } from "../dao/models/messages.model.js";
 
 const router = Router();
-const pm = new ProductManager(path.join(__dirname, "../files/products.json"));
+const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
 
 router.get("/", async (req, res) => {
   let products = await pm.getProducts(req.query.limit);
@@ -18,7 +18,7 @@ router.get("/realtimeproducts", async (req, res) => {
 });
 
 router.get("/chat", async (req, res) => {
-  let messages = await messagesModel.find().lean();
+  let messages = await messagesModel.find();
   res.render("chat", { messages, styles: "chat.css" });
 });
 

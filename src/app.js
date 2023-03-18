@@ -17,7 +17,12 @@ const app = express();
 const port = 8080;
 const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
 
-app.engine("handlebars", engine());
+app.engine("handlebars", engine({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  }
+}));
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname,"../views"));
 
