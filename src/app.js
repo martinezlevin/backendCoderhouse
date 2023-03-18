@@ -3,7 +3,6 @@ import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import path from "path";
-
 import productsFSRouter from "./routes/products.router.js";
 import cartsFSRouter from "./routes/carts.router.js";
 import cartsDBRouter from "./routes/cartsDB.router.js";
@@ -25,10 +24,8 @@ app.engine("handlebars", engine({
 }));
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname,"../views"));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/productsFS", productsFSRouter);
@@ -39,7 +36,6 @@ app.use("/api/productsDB", productsDBRouter);
 const httpServer = app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
-
 
 const io = new Server(httpServer);
 
@@ -70,7 +66,7 @@ io.on("connection", async (socket) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb+srv://admin01:Rafa1234@cluster0.pfcfkjg.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce");
+    await mongoose.connect("");
     console.log("DB connection success");
   } catch (error) {
     console.log(`DB connection fail. Error: ${error}`);
