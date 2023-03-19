@@ -18,7 +18,14 @@ class Product {
 export default class ProductManagerFS {
   constructor(path) {
     this.path = path;
-  }
+    this.getProducts = this.getProducts.bind(this);
+    this.getProductById = this.getProductById.bind(this);
+    this.addProduct = this.addProduct.bind(this);
+    this.updateProduct = this.updateProduct.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
+    this.addProductSocket = this.addProductSocket.bind(this);
+    this.deleteProductSocket = this.deleteProductSocket.bind(this);
+}
 
   async getProducts(limit) {
     let fileExists = fs.existsSync(this.path);
@@ -53,7 +60,7 @@ export default class ProductManagerFS {
       let newProduct = new Product(id, title, description, code, price, status, stock, category, thumbnails);
       products.push(newProduct);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ message: "Producto agregado con éxito." });
+      return res.status(201).json({ mensaje: "Producto agregado con éxito." });
     }
   }
 
@@ -79,7 +86,7 @@ export default class ProductManagerFS {
         category && (products[indexByID].category = category);
         thumbnails && (products[indexByID].thumbnails = thumbnails);
         await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-        return res.status(201).json({ message: "Producto actualizado con éxito." });
+        return res.status(201).json({ mensaje: "Producto actualizado con éxito." });
       }
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
@@ -95,7 +102,7 @@ export default class ProductManagerFS {
     if (productExists) {
       products.splice(productIndex, 1);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ message: "Producto eliminado con éxito." });
+      return res.status(201).json({ mensaje: "Producto eliminado con éxito." });
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
     }
@@ -142,7 +149,7 @@ export default class ProductManagerFS {
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
       return {
         success: true,
-        message: "Producto agregado con éxito.",
+        mensaje: "Producto agregado con éxito.",
       };
     }
   }

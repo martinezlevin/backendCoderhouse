@@ -33,7 +33,7 @@ export default class productManagerDB {
         category: category,
         thumbnails: thumbnails,
       });
-      return res.status(201).json({ message: `Producto agregado con éxito.` });
+      return res.status(201).json({ mensaje: "Producto agregado con éxito." });
     }
   }
 
@@ -51,7 +51,7 @@ export default class productManagerDB {
       stock && (await productsModel.updateOne({ _id: req.params.pid }, { $set: { stock: stock } }));
       category && (await productsModel.updateOne({ _id: req.params.pid }, { $set: { category: category } }));
       thumbnails && (await productsModel.updateOne({ _id: req.params.pid }, { $set: { thumbnails: thumbnails } }));
-      return res.status(201).json({ message: "Producto actualizado con éxito." });
+      return res.status(201).json({ mensaje: "Producto actualizado con éxito." });
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
     }
@@ -62,7 +62,7 @@ export default class productManagerDB {
     let product = await productsModel.find({ _id: req.params.pid });
     if (product.length) {
       await productsModel.deleteOne({ _id: req.params.pid });
-      return res.status(201).json({ message: "Producto eliminado con éxito." });
+      return res.status(201).json({ mensaje: "Producto eliminado con éxito." });
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
     }
