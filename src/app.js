@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/productsFS", productsFSRouter);
-// app.use("/api/cartsFS", cartsFSRouter); quito la ruta para evitar errores
+// app.use("/api/cartsFS", cartsFSRouter); quito la ruta para evitar errores 
 app.use("/api/cartsDB", cartsDBRouter);
 app.use("/api/productsDB", productsDBRouter);
 
