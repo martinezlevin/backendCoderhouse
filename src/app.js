@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import path from "path";
 import productsFSRouter from "./routes/products.router.js";
-import cartsFSRouter from "./routes/carts.router.js";
+// import cartsFSRouter from "./routes/carts.router.js";
 import cartsDBRouter from "./routes/cartsDB.router.js";
 import productsDBRouter from "./routes/productsDB.router.js";
 import viewsRouter from "./routes/views.router.js";
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/productsFS", productsFSRouter);
-app.use("/api/cartsFS", cartsFSRouter);
+// app.use("/api/cartsFS", cartsFSRouter);
 app.use("/api/cartsDB", cartsDBRouter);
 app.use("/api/productsDB", productsDBRouter);
 
