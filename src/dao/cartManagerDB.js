@@ -33,7 +33,7 @@ export default class CartManagerDB {
     } catch (error) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({
-            mensaje: "El carrito con el id ${id} no fue encontrado."})
+            message: "El carrito con el id ${id} no fue encontrado."})
     }
 
     res.setHeader('Content-Type', 'application/json');
@@ -52,7 +52,7 @@ export default class CartManagerDB {
       } else {
         await cartsModel.updateOne({ _id: req.params.cid }, { $push: { products: { productId: req.params.pid } } });
       }
-      return res.status(201).json({ mensaje: "Producto agregado con éxito." });
+      return res.status(201).json({ message: "Producto agregado con éxito." });
     } else {
       return res.status(400).json({ error: "Carrito no encontrado." });
     }
@@ -67,7 +67,7 @@ export default class CartManagerDB {
     } catch (error) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({
-            mensaje: "El carrito con el id ${id} no fue encontrado."})
+          message: "El carrito con el id ${id} no fue encontrado."})
     }
 
     let carts = await cartsModel.find()
@@ -93,12 +93,12 @@ async updateProductFromCart(req, res) {
       } else {
           res.setHeader("Content-Type", "aplication/json")
           res.status(400).json({
-              mensaje: "No existe un producto con Id '${idProd}'"})
+            message: "No existe un producto con Id '${idProd}'"})
       }
   } else {
       res.setHeader("Content-Type", "aplication/json")
       res.status(400).json({
-        mensaje: "No existe el carrito con Id '${idCart}'"})
+        message: "No existe el carrito con Id '${idCart}'"})
   }
 }
 
@@ -111,7 +111,7 @@ async deleteCart(req, res) {
       console.log('Carrito eliminado: ' + cartToDelete)
   } catch (error) {
       res.setHeader('Content-Type', 'application/json');
-      return res.status(400).json({ mensaje: "El carrito con el id ${id} no fue encontrado."})
+      return res.status(400).json({ message: "El carrito con el id ${id} no fue encontrado."})
   }
 
   let carts = await cartsModel.find()
@@ -133,11 +133,11 @@ async deleteProductInCart(req, res) {
           res.status(200).json({ carts })
       } else {
           res.setHeader("Content-Type", "aplication/json")
-          res.status(400).json({ mensaje: "No existe un producto con id '${idProd}'"})
+          res.status(400).json({ message: "No existe un producto con id '${idProd}'"})
       }
   } else {
       res.setHeader("Content-Type", "aplication/json")
-      res.status(400).json({ mensaje: "No existe un carrito con id '${idCart}'"})
+      res.status(400).json({ message: "No existe un carrito con id '${idCart}'"})
   }
 }
 

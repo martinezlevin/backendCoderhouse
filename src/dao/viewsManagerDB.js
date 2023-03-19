@@ -1,4 +1,4 @@
-import productsModel from './models/products.models.js';
+import { productsModel } from './models/products.models.js';
 
 export default class ViewsManagerDB {
 
@@ -22,7 +22,7 @@ export default class ViewsManagerDB {
 
         } catch (error) {
             res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json({ mensaje: "Error al obtener los productos de la DB"})
+            return res.status(500).json({ message: "Error al obtener los productos de la DB"})
         }
 
         let { totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } = products
@@ -32,7 +32,6 @@ export default class ViewsManagerDB {
             products: products.docs,
             totalPages, hasPrevPage, hasNextPage, prevPage, nextPage
         })
-
     }
 
 }

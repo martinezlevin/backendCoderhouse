@@ -60,7 +60,7 @@ export default class ProductManagerFS {
       let newProduct = new Product(id, title, description, code, price, status, stock, category, thumbnails);
       products.push(newProduct);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ mensaje: "Producto agregado con éxito." });
+      return res.status(201).json({ message: "Producto agregado con éxito." });
     }
   }
 
@@ -86,7 +86,7 @@ export default class ProductManagerFS {
         category && (products[indexByID].category = category);
         thumbnails && (products[indexByID].thumbnails = thumbnails);
         await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-        return res.status(201).json({ mensaje: "Producto actualizado con éxito." });
+        return res.status(201).json({ message: "Producto actualizado con éxito." });
       }
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
@@ -102,7 +102,7 @@ export default class ProductManagerFS {
     if (productExists) {
       products.splice(productIndex, 1);
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
-      return res.status(201).json({ mensaje: "Producto eliminado con éxito." });
+      return res.status(201).json({ message: "Producto eliminado con éxito." });
     } else {
       return res.status(400).json({ error: "Producto no encontrado." });
     }
@@ -149,7 +149,7 @@ export default class ProductManagerFS {
       await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
       return {
         success: true,
-        mensaje: "Producto agregado con éxito.",
+        message: "Producto agregado con éxito.",
       };
     }
   }

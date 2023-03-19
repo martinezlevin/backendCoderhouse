@@ -8,4 +8,4 @@ class messageManagerDB {
     }
 }
 
-export default messageManagerDB;
+export default messageManagerDB.js;

@@ -36,7 +36,7 @@ export default class CartManagerFS {
           })
       } else {
           res.setHeader("Content-Type", "aplication/json")
-          res.status(400).json({ mensaje: "No existe el archivo ${this.path}'" })
+          res.status(400).json({ message: "No existe el archivo ${this.path}'" })
           return []
       }
   }
@@ -60,7 +60,7 @@ export default class CartManagerFS {
           console.error("Not Found 2")
           res.setHeader('Content-Type', 'application/json');
           return res.status(500).json({
-              mensaje: "Carritono encontrado."
+            message: "Carrito no encontrado."
           })
       }
   }
@@ -81,12 +81,12 @@ export default class CartManagerFS {
           } else {
               console.error("Not Found 1")
               res.setHeader("Content-Type", "aplication/json")
-              res.status(400).json({ mensaje: "No existe el carrito con id'${req.params.cid}'"})
+              res.status(400).json({ message: "No existe el carrito con id'${req.params.cid}'"})
           }
       } else {
           console.error("Not Found 2")
           res.setHeader('Content-Type', 'application/json');
-          return res.status(500).json({ mensaje: "Carrito no encontrado."})})
+          return res.status(500).json({ message: "Carrito no encontrado."})
       }
   }
 
@@ -123,12 +123,12 @@ export default class CartManagerFS {
               }
           } else {
               res.setHeader("Content-Type", "aplication/json")
-              res.status(400).json({ mensaje: "No existe el carrito con Id '${idCart}'"})
+              res.status(400).json({ message: "No existe el carrito con Id '${idCart}'"})
           }
       } else {
           console.error("Not Found 2")
           res.setHeader('Content-Type', 'application/json');
-          return res.status(500).json({ mensaje: "Carrito no encontrado."})
+          return res.status(500).json({ message: "Carrito no encontrado."})
       }
   }
 
@@ -159,7 +159,7 @@ export default class CartManagerFS {
           console.error("Not Found 2")
           res.setHeader('Content-Type', 'application/json');
           return res.status(500).json({
-              mensaje: "Carrito no encontrado."
+            message: "Carrito no encontrado."
           })
       }
   }
