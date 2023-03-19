@@ -10,7 +10,7 @@ export default class CartManagerDB {
   async addCart(req, res) {
     res.setHeader("Content-Type", "application/json");
     await cartsModel.create({ alias: req.query.alias });
-    return res.status(201).json({ message: "Cart created successfully" });
+    return res.status(201).json({ message: "Carrito creado con éxito." });
   }
 
   async getCart(req, res) {
@@ -19,7 +19,7 @@ export default class CartManagerDB {
     if (cart) {
       return res.status(200).json({ cart });
     } else {
-      return res.status(400).json({ error: "Cart not found." });
+      return res.status(400).json({ error: "Carrito no encontrado." });
     }
   }
 
@@ -33,9 +33,9 @@ export default class CartManagerDB {
       } else {
         await cartsModel.updateOne({ _id: req.params.cid }, { $push: { products: { productId: req.params.pid } } });
       }
-      return res.status(201).json({ message: "Product added successfully" });
+      return res.status(201).json({ message: "Producto agregado con éxito." });
     } else {
-      return res.status(400).json({ error: "Cart not found." });
+      return res.status(400).json({ error: "Carrito no encontrado." });
     }
   }
 }

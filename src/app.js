@@ -40,7 +40,7 @@ const httpServer = app.listen(port, () => {
 const io = new Server(httpServer);
 
 io.on("connection", async (socket) => {
-  console.log("New client connected");
+  console.log("Nuevo cliente conectado");
 
   socket.on("deleteProduct", async (id) => {
     let response = await pm.deleteProductSocket(id);
@@ -66,7 +66,7 @@ io.on("connection", async (socket) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017");///me falta vincular mongo despues del cambio de OS a la pc
+    await mongoose.connect("mongodb://localhost:27017/");
     console.log("Conexión a DB establecida");
   } catch (error) {
     console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);
