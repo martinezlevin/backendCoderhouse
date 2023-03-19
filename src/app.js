@@ -66,7 +66,7 @@ io.on("connection", async (socket) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/");
+    await mongoose.connect("mongodb://127.0.0.1:27017/guillemtz");
     console.log("Conexión a DB establecida");
   } catch (error) {
     console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);
