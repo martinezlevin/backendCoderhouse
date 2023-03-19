@@ -1,4 +1,4 @@
-import messagesModel from './models/messages.models.js';
+import messagesModel from "./models/messages.models.js";
 
 class messageManagerDB {
     async addMessage(message, req, res) {
