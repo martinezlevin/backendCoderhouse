@@ -14,7 +14,7 @@ import { messagesModel } from "./dao/models/messages.model.js";
 
 const app = express();
 const port = 8080;
-const pm = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
+const product = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
 
 app.engine("handlebars", engine({
   runtimeOptions: {
