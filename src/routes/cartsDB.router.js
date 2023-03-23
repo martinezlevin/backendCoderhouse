@@ -11,4 +11,6 @@ router.get("/:cid", (req, res) => cm.getCart(req, res));
 
 router.post("/:cid/product/:pid", (req, res) => cm.addProduct(req, res));
 
+router.delete("/:cid/product/:pid", (req, res) => cm.deleteProduct(req, res));
+
 export default router;
