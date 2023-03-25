@@ -62,7 +62,7 @@ io.on("connection", async (socket) => {
 
 const conectar = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce");
+    await mongoose.connect("mongodb+srv://Martinez:12345@ejemplo.k2aia89.mongodb.net/test");
     console.log("Conexión a DB establecida");
   } catch (error) {
     console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);

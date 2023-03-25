@@ -4,22 +4,22 @@ import CartManagerDB from "../dao/cartManagerDB.js";
 import { messagesModel } from "../dao/models/messages.model.js";
 
 const router = Router();
-const productManager = new productManagerDB;
-const cartManager = new CartManagerDB;
+const pm = new productManagerDB;
+const cm = new CartManagerDB;
 
 router.get("/products", async (req, res) => {
-  let products = await productManager.getProducts(req);
-  let carts = await cartManager.getCarts();
+  let products = await pm.getProducts(req);
+  let carts = await cm.getCarts();
   res.render("products", { products, carts, styles: "products.css" });
 });
 
 router.get("/carts/:cid", async (req, res) => {
-  let cart = await cartManager.getCartView(req, res);
+  let cart = await cm.getCartView(req, res);
   res.render("cart", { cart, styles: "cart.css" });
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-  let products = await productManager.getProducts(req);
+  let products = await pm.getProducts(req);
   res.render("realTimeProducts", { products, styles: "realTimeProducts.css" });
 });
 
