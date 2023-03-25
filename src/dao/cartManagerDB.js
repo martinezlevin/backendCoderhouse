@@ -1,10 +1,20 @@
 import { cartsModel } from "./models/carts.model.js";
 
 export default class CartManagerDB {
+  async getCarts() {
+    let carts = await cartsModel.find();
+    return carts;
+  }
 
-  async getCarts(req, res) {
+  async addCart(req, res) {
     res.setHeader("Content-Type", "application/json");
-    let cart = await cartsModel.findById(req.params.cid);
+    await cartsModel.create({ alias: req.query.alias });
+    return res.status(201).json({ message: "Carrito creado con éxito." });
+  }
+
+  async getCart(req, res) {
+    res.setHeader("Content-Type", "application/json");
+    let cart = await cartsModel.findById(req.params.cid).populate("products.productId");
     if (cart) {
       return res.status(200).json({ cart });
     } else {
@@ -12,45 +22,22 @@ export default class CartManagerDB {
     }
   }
 
-    async addCart(req, res) {
-        let cartToCreate = req.body;
-
-        let newCart = await cartsModel.create(cartToCreate);
-        console.log(newCart)
-        
-        let carts = await cartsModel.find()
-        res.setHeader('Content-Type', 'application/json');
-        res.status(201).json({
-            carts
-        })
-    }
-
-  async getCartById(req, res) {
-    let id = req.params.cid;
-    let cartById;
-    try {
-        cartById = await cartsModel.find({ _id: id })
-    } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({
-            message: "El carrito con el id ${id} no fue encontrado."})
-    }
-
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({
-        cartById
-    })
-}
+  async getCartView(req, res) {
+    let cart = await cartsModel.findById(req.params.cid).populate("products.productId");
+    return cart;
+  }
 
   async addProduct(req, res) {
     res.setHeader("Content-Type", "application/json");
-    let cart = await cartsModel.findById(req.params.cid);
+    let { cid, pid } = req.params;
+    let { qty } = req.body;
+    let cart = await cartsModel.findById(cid);
     if (cart) {
-      let productIndex = cart.products.findIndex((item) => item.productId === req.params.pid);
+      let productIndex = cart.products.findIndex((item) => item.productId == pid);
       if (productIndex !== -1) {
-        await cartsModel.updateOne({ _id: req.params.cid, "products.productId": req.params.pid }, { $inc: { "products.$.quantity": 1 } });
+        await cartsModel.updateOne({ _id: cid, "products.productId": pid }, { $inc: { "products.$.quantity": qty } });
       } else {
-        await cartsModel.updateOne({ _id: req.params.cid }, { $push: { products: { productId: req.params.pid } } });
+        await cartsModel.updateOne({ _id: cid }, { $push: { products: { productId: pid, quantity: qty } } });
       }
       return res.status(201).json({ message: "Producto agregado con éxito." });
     } else {
@@ -58,87 +45,38 @@ export default class CartManagerDB {
     }
   }
 
-  async updateCart(req, res) {
-    let id = req.params.cid;
-    let cartToUpdate = req.body;
-    try {
-        let newCart = await cartsModel.updateOne({ _id: id }, cartToUpdate)
-        console.log(newCart)
-    } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({
-          message: "El carrito con el id ${id} no fue encontrado."})
+  async deleteProduct(req, res) {
+    res.setHeader("Content-Type", "application/json");
+    let { cid, pid } = req.params;
+    await cartsModel.updateOne({ _id: cid }, { $pull: { products: { productId: pid } } });
+    return res.status(200).json({ message: "Producto eliminado con éxito." });
+  }
+
+  async addProducts(req, res) {
+    res.setHeader("Content-Type", "application/json");
+    let { cid } = req.params;
+    let { products } = req.body;
+    let cart = await cartsModel.findById(cid);
+    if (cart) {
+      for (let i = 0; i < products.length; i++) {
+        let { productId: pid, quantity: qty } = products[i];
+        let productIndex = cart.products.findIndex((item) => item.productId === pid);
+        if (productIndex !== -1) {
+          await cartsModel.updateOne({ _id: cid, "products.productId": pid }, { $inc: { "products.$.quantity": qty } });
+        } else {
+          await cartsModel.updateOne({ _id: cid }, { $push: { products: { productId: pid, quantity: qty } } });
+        }
+      }
+      return res.status(200).json({ message: "Productos añadidos con éxito." });
+    } else {
+      return res.status(400).json({ error: "Carrito no encontrado." });
     }
-
-    let carts = await cartsModel.find()
-    res.setHeader('Content-Type', 'application/json');
-    res.status(201).json({ carts })
-}
-
-async updateProductFromCart(req, res) {
-  let newQuantity = req.body.quantity
-  let idCart = req.params.cid
-  let idProd = req.params.pid
-
-  let cart = await cartsModel.findById(idCart)
-  if (cart) {
-      let product = cart.products.find((item) => item.productId == idProd)
-      if (product) {
-          product.quantity = newQuantity;
-          await cartsModel.updateOne({ _id: idCart }, { $set: { products: cart.products } });
-
-          let carts = await cartsModel.find()
-          res.setHeader('Content-Type', 'application/json');
-          res.status(200).json({ carts })
-      } else {
-          res.setHeader("Content-Type", "aplication/json")
-          res.status(400).json({
-            message: "No existe un producto con Id '${idProd}'"})
-      }
-  } else {
-      res.setHeader("Content-Type", "aplication/json")
-      res.status(400).json({
-        message: "No existe el carrito con Id '${idCart}'"})
-  }
-}
-
-async deleteCart(req, res) {
-  let id = req.params.cid;
-  let cartToDelete;
-
-  try {
-      cartToDelete = await cartsModel.deleteOne({ _id: id });
-      console.log('Carrito eliminado: ' + cartToDelete)
-  } catch (error) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.status(400).json({ message: "El carrito con el id ${id} no fue encontrado."})
   }
 
-  let carts = await cartsModel.find()
-  res.setHeader('Content-Type', 'application/json');
-  res.status(200).json({ carts })
-}
-
-async deleteProductInCart(req, res) {
-  let idCart = req.params.cid
-  let idProd = req.params.pid
-
-  let cart = await cartsModel.findById(idCart)
-  if (cart) {
-      let indexProd = cart.products.findIndex((item) => item.productId == idProd)
-      if (indexProd !== -1) {
-          await cartsModel.deleteOne({ "products.productId": idProd });
-          let carts = await cartsModel.find()
-          res.setHeader('Content-Type', 'application/json');
-          res.status(200).json({ carts })
-      } else {
-          res.setHeader("Content-Type", "aplication/json")
-          res.status(400).json({ message: "No existe un producto con id '${idProd}'"})
-      }
-  } else {
-      res.setHeader("Content-Type", "aplication/json")
-      res.status(400).json({ message: "No existe un carrito con id '${idCart}'"})
+  async deleteProducts(req, res) {
+    res.setHeader("Content-Type", "application/json");
+    let { cid } = req.params;
+    await cartsModel.updateOne({ _id: cid }, { $set: { products: [] } });
+    return res.status(200).json({ message: "Productos eliminados con éxito." });
   }
-}
-
 }

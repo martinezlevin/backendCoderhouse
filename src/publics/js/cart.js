@@ -1,0 +1,1 @@
+console.log("el cart.js se ha ejecutado correctamente");

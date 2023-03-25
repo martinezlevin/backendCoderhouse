@@ -4,20 +4,24 @@ import productManagerDB from "../dao/productManagerDB.js";
 import { addProductMid, updateProductMid } from "../middlewares/products.middlewares.js";
 
 const router = Router();
-const product = new productManagerDB;
+const productManager = new productManagerDB();
 
 router.get("/", async (req, res) => {
-  let products = await product.getProducts(req.query.limit);
   res.setHeader("Content-Type", "application/json");
-  res.status(200).json({ products });
+  let response = await productManager.getProducts(req.query);
+  if (response.status === "success") {
+    res.status(200).json(response);
+  } else {
+    res.status(500).json(response);
+  }
 });
 
-router.get("/:pid", (req, res) => product.getProductById(req, res));
+router.get("/:pid", (req, res) => productManager.getProductById(req, res));
 
-router.post("/", addProductMid, (req, res) => product.addProduct(req, res));
+router.post("/", addProductMid, (req, res) => productManager.addProduct(req, res));
 
-router.put("/:pid", updateProductMid, (req, res) => product.updateProduct(req, res));
+router.put("/:pid", updateProductMid, (req, res) => productManager.updateProduct(req, res));
 
-router.delete("/:pid", (req, res) => product.deleteProduct(req, res));
+router.delete("/:pid", (req, res) => productManager.deleteProduct(req, res));
 
 export default router;

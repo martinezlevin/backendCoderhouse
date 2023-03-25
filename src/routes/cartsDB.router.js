@@ -1,16 +1,20 @@
 import { Router } from "express";
-import { __dirname } from "../helpers/utils.js";
 import CartManagerDB from "../dao/cartManagerDB.js";
 
 const router = Router();
-const cm = new CartManagerDB;
+const cartManager = new CartManagerDB;
 
-router.post("/", (req, res) => cm.addCart(req, res));
+router.get("/:cid", (req, res) => cartManager.getCart(req, res));
 
-router.get("/:cid", (req, res) => cm.getCart(req, res));
+router.post("/", (req, res) => cartManager.addCart(req, res));
 
-router.post("/:cid/product/:pid", (req, res) => cm.addProduct(req, res));
+router.post("/:cid/product/:pid", (req, res) => cartManager.addProduct(req, res));
 
-router.delete("/:cid/product/:pid", (req, res) => cm.deleteProduct(req, res));
+router.put("/:cid", (req, res) => cartManager.addProducts(req, res));
+
+router.delete("/:cid", (req, res) => cartManager.deleteProducts(req, res));
+
+router.delete("/:cid/product/:pid", (req, res) => cartManager.deleteProduct(req, res));
+
 
 export default router;

@@ -1,24 +1,25 @@
 import { Router } from "express";
-import { __dirname } from "../helpers/utils.js";
-import ProductManagerFS from "../dao/productManagerFS.js";
-import path from "path";
+import productManagerDB from "../dao/productManagerDB.js";
+import CartManagerDB from "../dao/cartManagerDB.js";
 import { messagesModel } from "../dao/models/messages.model.js";
-import ViewsManagerDB from "../dao/viewsManagerDB.js";
 
 const router = Router();
-const product = new ProductManagerFS(path.join(__dirname, "../files/products.json"));
-const view = new ViewsManagerDB
+const productManager = new productManagerDB;
+const cartManager = new CartManagerDB;
 
+router.get("/products", async (req, res) => {
+  let products = await productManager.getProducts(req);
+  let carts = await cartManager.getCarts();
+  res.render("products", { products, carts, styles: "products.css" });
+});
 
-router.get('/products', view.getProducts);
-
-router.get("/", async (req, res) => {
-  let products = await product.getProducts(req.query.limit);
-  res.render("home", { products, styles: "home.css" });
+router.get("/carts/:cid", async (req, res) => {
+  let cart = await cartManager.getCartView(req, res);
+  res.render("cart", { cart, styles: "cart.css" });
 });
 
 router.get("/realtimeproducts", async (req, res) => {
-  let products = await product.getProducts(req.query.limit);
+  let products = await productManager.getProducts(req);
   res.render("realTimeProducts", { products, styles: "realTimeProducts.css" });
 });
 

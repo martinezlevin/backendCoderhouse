@@ -1,0 +1,14 @@
+<h1>Carts</h1>
+<hr />
+<p>Cart id: {{cart._id}}</p>
+<p>Cart alias: {{cart.alias}}</p>
+<hr />
+{{#each cart.products}}
+  <div>
+    <h2>Title: {{this.productId.title}}</h2>
+    <p>Price: ${{this.productId.price}}</p>
+    <p>Cantidad: {{this.quantity}}</p>
+  </div>
+  <hr />
+{{/each}}
+<script src="/js/cart.js"></script>

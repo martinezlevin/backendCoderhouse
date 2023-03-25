@@ -1,12 +1,12 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const cartsCollection = "carts";
 
 const cartItemSchema = new Schema({
   productId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "products",
     required: true,
-    unique: true,
   },
   quantity: {
     type: Number,

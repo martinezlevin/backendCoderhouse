@@ -35,7 +35,7 @@ const showToast = (message) => {
   }, 2000);
 }
 
-window.addEventListener('load', () => showToast('Lista actualizada!'))
+window.addEventListener('load', () => showToast('Lista actualizada'))
 
 socket.on("productListUpdated", () => {
   location.reload();
