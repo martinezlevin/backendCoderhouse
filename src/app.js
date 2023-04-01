@@ -12,6 +12,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import {  router as vistasRouter } from "./routes/vistas.router.js";
 import {  router as sessionsRouter } from "./routes/sessions.router.js";
+import passport from "passport";
+import { inicializaEstrategia } from "./config/passport.js";
 
 const app = express();
 const port = 8080;
@@ -42,6 +44,10 @@ app.use(session({
     ttl:60
   })
 }));
+inicializaEstrategia();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 const httpServer = app.listen(port, () => {
   console.log(`App listening on port ${port}`);

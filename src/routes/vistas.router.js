@@ -18,6 +18,14 @@ const auth2=(req, res, next)=>{
   next();
 }
 
+router.get('/',auth,(req,res)=>{
+
+  res.setHeader('Content-Type','text/html');
+  res.status(200).render('home',{
+      nombreCompleto:req.session.usuario.nombre+' '+req.session.usuario.apellido
+  })
+})
+
 router.get("/products", async (req, res) => {
   let products = await pm.getProducts(req);
   let carts = await cm.getCarts();
