@@ -11,7 +11,7 @@ import { messagesModel } from "./dao/models/messages.model.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import {  router as vistasRouter } from "./routes/vistas.router.js";
-import {  router as sessionsRouter } from "./routes/sessions.router.js";
+import {  Router as sessionsRouter } from "./routes/sessions.router.js";
 import passport from "passport";
 import { inicializaEstrategia } from "./config/passport.js";
 
