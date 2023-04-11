@@ -29,15 +29,18 @@
 </form>
 <h2>Lista de productos</h2>
 <span id="toast">Lista actualizada!</span>
-{{#each products}}
+{{#each products.payload}}
   <div>
-    <h2>{{this.title}}</h2>
-    <p>{{this.description}}</p>
-    {{#if status}}
+    <h2>Title: {{this.title}}</h2>
+    <p>Category: {{this.category}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Price: ${{this.price}}</p>
+    {{#if this.status}}
       <p>Disponible</p>
     {{else}}
       <p>No disponible</p>
     {{/if}}
+    <hr>
   </div>
 {{/each}}
 

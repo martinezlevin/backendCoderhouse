@@ -70,7 +70,7 @@ export default class productManagerDB {
     if (product.length) {
       return res.status(200).json({ product });
     } else {
-      return res.status(400).json({ error: "Producto no encontrado." });
+      return res.status(400).json({ error: "Producto no encontrado."});
     }
   }
 
@@ -79,7 +79,7 @@ export default class productManagerDB {
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
     let product = await productsModel.find({ code: code });
     if (product.length) {
-      return res.status(400).json({ error: "Producto no añadido. Error: el código ya existe." });
+      return res.status(400).json({ error: "Producto no añadido. Error: el código ya existe."});
     } else {
       await productsModel.create({
         title: title,
@@ -122,7 +122,7 @@ export default class productManagerDB {
       await productsModel.deleteOne({ _id: req.params.pid });
       return res.status(201).json({ message: "Producto eliminado con éxito." });
     } else {
-      return res.status(400).json({ error: "Producto no encontrado." });
+      return res.status(400).json({ error: "Producto no encontrado."});
     }
   }
 
@@ -148,7 +148,7 @@ export default class productManagerDB {
     if (productDB.length) {
       return {
         success: false,
-        message: `Producto no añadido. Errores: ${productExists ? "El producto ya existe." : ""}${
+        message: `Product not added. Errors:${productExists ? "El producto ya existe." : ""}${
           aFieldIsEmpty ? "Debe completar todos los campos requeridos." : ""
         }`,
       };

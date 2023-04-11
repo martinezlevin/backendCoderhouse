@@ -29,13 +29,13 @@ addProductForm.addEventListener("submit", (e) => {
 
 const showToast = (message) => {
   toast.innerHTML = message;
-  toast.style.display = 'block';
+  toast.style.display = "block";
   setTimeout(() => {
-    toast.style.display = 'none';
+    toast.style.display = "none";
   }, 2000);
-}
+};
 
-window.addEventListener('load', () => showToast('Lista actualizada'))
+window.addEventListener("load", () => showToast("Lista actualizada"));
 
 socket.on("productListUpdated", () => {
   location.reload();

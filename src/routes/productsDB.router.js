@@ -8,7 +8,7 @@ const pm = new productManagerDB();
 
 router.get("/", async (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  let response = await pm.getProducts(req.query);
+  let response = await pm.getProducts(req);
   if (response.status === "success") {
     res.status(200).json(response);
   } else {

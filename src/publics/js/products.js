@@ -63,7 +63,7 @@ for (let i = 0; i < addToCartForms.length; i++) {
       
       try {
         await fetch(url, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(data) });
-        alert("Producto agregado al carrito.")
+        alert("Producto agregado al carrito")
       } catch (error) {
         console.log(error);
       }
@@ -72,7 +72,7 @@ for (let i = 0; i < addToCartForms.length; i++) {
     if (cartId) {
       addToCart(cartId, productId, quantity);
     } else {
-      alert("Debe seleccionar un carrito.");
+      alert("Debe seleccionar un carrito");
     }
 
     e.target.reset();
