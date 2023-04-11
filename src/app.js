@@ -7,7 +7,7 @@ import path from "path";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
-import { initializePassport } from "./config/passport.config.js";
+import { initializePassport } from "./config/passport.js";
 
 import productsDBRouter from "./routes/productsDB.router.js";
 import cartsDBRouter from "./routes/cartsDB.router.js";

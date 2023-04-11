@@ -8,7 +8,7 @@ router.get("/github", passport.authenticate("github", {}), (req, res) => {
 
 })
 
-router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), (req, res) => {
+router.get("/callbackGithub", passport.authenticate("github", { failureRedirect: "/login" }), (req, res) => {
   let { firstName, lastName, email, age, role } = req.user;
 
   req.session.user = {
