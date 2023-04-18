@@ -27,9 +27,6 @@ export const initializePassport = () => {
     )
   );
 
-
-
-export const initializePassport = () => {
   passport.use(
     "github",
     new github.Strategy(
