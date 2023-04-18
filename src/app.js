@@ -2,10 +2,11 @@ import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
-import { __dirname } from "./helpers/utils.js";
+import { __dirname, createToken, authToken } from "./helpers/utils.js";
 import path from "path";
-import session from "express-session";
-import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
+// import session from "express-session";
+// import MongoStore from "connect-mongo";
 import passport from "passport";
 import { initializePassport } from "./config/passport.js";
 
@@ -36,7 +37,9 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
+app.use(cookieParser());
+
+/* app.use(session({
   secret:'miPalabraSecreta',
   resave: true,
   saveUninitialized: true,
@@ -44,10 +47,12 @@ app.use(session({
     mongoUrl:'mongodb+srv://Martinez:12345@ejemplo.k2aia89.mongodb.net/test',
     ttl:60
   })
-}));
+})); */
+
+
 initializePassport();
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);

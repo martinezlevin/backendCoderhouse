@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const usersCollection = "users";
 
@@ -15,6 +15,10 @@ const usersSchema = new Schema({
   role: String,
   github: Boolean,
   githubProfile: Object,
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "carts",
+  },
 });
 
 export const usersModel = model(usersCollection, usersSchema);

@@ -6,6 +6,7 @@ let limitInput = document.getElementById("limitInput");
 let pageInput = document.getElementById("pageInput");
 let cartSelect = document.getElementById("cartSelect");
 let addToCartForms = document.getElementsByClassName("addToCartForm");
+let logOut = document.getElementById("logOut");
 
 categorySelect.value = JSON.parse(sessionStorage.getItem("categorySelect"));
 statusSelect.value = JSON.parse(sessionStorage.getItem("statusSelect"));
@@ -60,14 +61,14 @@ for (let i = 0; i < addToCartForms.length; i++) {
     const addToCart = async (cartId, productId, quantity) => {
       let url = `/api/cartsDB/${cartId}/product/${productId}`;
       let data = { qty: quantity };
-      
+
       try {
-        await fetch(url, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(data) });
-        alert("Producto agregado al carrito")
+        await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+        alert("Producto agregado al carrito");
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
     if (cartId) {
       addToCart(cartId, productId, quantity);
@@ -78,5 +79,12 @@ for (let i = 0; i < addToCartForms.length; i++) {
     e.target.reset();
   });
 }
+
+logOut.addEventListener("click", () => {
+  fetch("/api/sessions/logout")
+    .then(() => {
+      document.location.href = "/login";
+    });
+});
 
 goAnchorHrefUpdate();
