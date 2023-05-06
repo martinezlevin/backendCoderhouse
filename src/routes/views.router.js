@@ -1,47 +1,48 @@
 import { Router } from "express";
-import productManagerDB from "../dao/productManagerDB.js";
-import CartManagerDB from "../dao/cartManagerDB.js";
-import { messagesModel } from "../dao/models/messages.model.js";
-import passport from "passport";
+import productsViewController from "../controllers/productsView.controller.js";
+import cartsViewController from "../controllers/cartsView.controller.js";
+import messagesController from "../controllers/messages.controller.js";
+import { authUser } from "../middlewares/auth.middlewares.js";
+import { passportCall } from "../utils/utils.js";
 
 const router = Router();
-const pm = new productManagerDB;
-const cm = new CartManagerDB;
 
-router.get("/logup"/* , authLoggedOut */, async (req, res) => {
+router.get("/logup", (req, res) => {
+  if (req.cookies.idToken) return res.redirect("/products");
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("logup");
+  res.status(200).render("logup", { styles: "logup.css" });
 });
 
-router.get("/login"/* , authLoggedOut */, async (req, res) => {
+router.get("/login", (req, res) => {
+  if (req.cookies.idToken) return res.redirect("/products");
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("login")
-})
+  res.status(200).render("login", { styles: "login.css" });
+});
 
-//router.get("/products"/* , authLoggedIn */, authToken, async (req, res) => {
-router.get("/products", passport.authenticate("jwt",{session: false}), async (req, res) => {
-  let products = await pm.getProducts(req);
-  let carts = await cm.getCarts();
+router.get("/products", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+  let products = await productsViewController.getProducts(req.query);
   let user = req.user;
-  res.render("products", { products, carts, user, styles: "products.css" });
+  res.setHeader("Content-Type", "text/html");
+  res.render("products", { products, user, styles: "products.css" });
 });
 
-//router.get("/carts/:cid" /* , authLoggedIn */, authToken, async (req, res) => {
-router.get("/carts/:cid", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  let cart = await cm.getCartView(req, res);
+router.get("/carts/:cid", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+  let cart = await cartsViewController.getCart(req.params.cid);
+  res.setHeader("Content-Type", "text/html");
   res.render("cart", { cart, styles: "cart.css" });
 });
 
-//router.get("/realtimeproducts" /* , authLoggedIn */, authToken, async (req, res) => {
-router.get("/realtimeproducts", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  let products = await pm.getProducts(req);
+router.get("/realtimeproducts", passportCall("jwt"), authUser(["admin"]), async (req, res) => {
+  let products = await productsViewController.getProducts(req.query);
+  res.setHeader("Content-Type", "text/html");
   res.render("realTimeProducts", { products, styles: "realTimeProducts.css" });
 });
 
-//router.get("/chat" /* , authLoggedIn */, authToken, async (req, res) => {
-router.get("/chat", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  let messages = await messagesModel.find();
-  res.render("chat", { messages, styles: "chat.css" });
+router.get("/chat", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+  let user = req.user;
+  let messages = await messagesController.getMessages();
+  res.setHeader("Content-Type", "text/html");
+  res.render("chat", { user, messages, styles: "chat.css" });
 });
 
 export default router;

@@ -1,9 +1,7 @@
 const socket = io();
 
-let user = JSON.parse(sessionStorage.getItem("user")) || prompt("Ingrese correo electrónico:");
-sessionStorage.setItem("user", JSON.stringify(user));
-
 let sendMessageForm = document.getElementById("sendMessage");
+let user = sendMessageForm.dataset.username;
 
 sendMessageForm.addEventListener("submit", (e) => {
   e.preventDefault();

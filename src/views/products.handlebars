@@ -1,6 +1,9 @@
-<h1>Home Products</h1>
+<h1>Inicio de productos</h1>
 <p>Hola, {{user.firstName}}!. Rol: {{user.role}}</p>
-<button id="logOut" >Cerrar sesión</button>
+<a id="logOut" href="/api/sessions/logout" >Cerrar sesión</a>
+<br>
+<br>
+<a id="cart" name="{{user.cart}}" href="/carts/{{user.cart}}">Ver carrito</a>
 <hr>
 <form id="paramsForm" action="">
   <label for="category">Categoría:</label>
@@ -37,14 +40,6 @@
 {{#if products.hasNextPage}}
   <a href="{{products.nextLink}}">Página siguiente</a>
 {{/if}}
-<br>
-<br>
-<label for="cartSelect">Carrito en uso:</label>
-<select name="cart" id="cartSelect">
-{{#each carts}}
-  <option value="{{this._id}}">{{this.alias}}</option>
-{{/each}}
-</select>
 <hr>
 {{#each products.payload}}
   <div>

@@ -1,26 +1,22 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
-import mongoose from "mongoose";
-import { __dirname, createToken, authToken } from "./helpers/utils.js";
+import { __dirname } from "./utils/utils.js";
 import path from "path";
 import cookieParser from "cookie-parser";
-// import session from "express-session";
-// import MongoStore from "connect-mongo";
 import passport from "passport";
-import { initializePassport } from "./config/passport.js";
+import { initializePassport } from "./config/passport.config.js";
+import { config } from "./config/config.js";
 
-import productsDBRouter from "./routes/productsDB.router.js";
-import cartsDBRouter from "./routes/cartsDB.router.js";
+import productsRouter from "./routes/products.router.js";
+import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 
-import productManagerDB from "./dao/productManagerDB.js";
-import { messagesModel } from "./dao/models/messages.model.js";
+import productsApiController from "./controllers/productsApi.controller.js";
+import messagesController from "./controllers/messages.controller.js";
 
 const app = express();
-const port = 8080;
-const pm = new productManagerDB;
 
 app.engine(
   "handlebars",
@@ -36,50 +32,33 @@ app.set("views", path.join(__dirname, "../views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
-
-/* app.use(session({
-  secret:'miPalabraSecreta',
-  resave: true,
-  saveUninitialized: true,
-  store:MongoStore.create({
-    mongoUrl:'mongodb+srv://Martinez:12345@ejemplo.k2aia89.mongodb.net/test',
-    ttl:60
-  })
-})); */
-
 
 initializePassport();
 app.use(passport.initialize());
-//app.use(passport.session());
-
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
-app.use("/api/cartsDB", cartsDBRouter);
-app.use("/api/productsDB", productsDBRouter);
+app.use("/api/carts", cartsRouter);
+app.use("/api/products", productsRouter);
 
-
-const httpServer = app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+const httpServer = app.listen(config.port, () => {
+  console.log(`App listening on port ${config.port}`);
 });
-
 const io = new Server(httpServer);
-
-io.on("connection", async (socket) => {
+io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("deleteProduct", async (id) => {
-    let response = await pm.deleteProductSocket(id);
+    let response = await productsApiController.deleteProductSocket(id);
     socket.emit("deleteProductRes", response);
     if (response.success) {
       socket.broadcast.emit("productListUpdated");
     }
   });
-  
+
   socket.on("addProduct", async (product) => {
-    let response = await pm.addProductSocket(product);
+    let response = await productsApiController.addProductSocket(product);
     socket.emit("addProductRes", response);
     if (response.success) {
       socket.broadcast.emit("productListUpdated");
@@ -87,11 +66,12 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("newMessage", async ({ user, message }) => {
-    await messagesModel.create({ user: user, message: message });
+    await messagesController.addMessage({ user, message });
     io.emit("messagesListUpdated");
-  })
+  });
 });
 
+/*
 const conectar = async () => {
   try {
     await mongoose.connect("mongodb+srv://Martinez:12345@ejemplo.k2aia89.mongodb.net/test");
@@ -101,6 +81,6 @@ const conectar = async () => {
   }
 }
 
-conectar();
+conectar();*/
 
 io.on("error", (error) => console.error(error));
