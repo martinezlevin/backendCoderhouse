@@ -16,6 +16,8 @@ import sessionsRouter from "./routes/sessions.router.js";
 import productsApiController from "./controllers/productsApi.controller.js";
 import messagesController from "./controllers/messages.controller.js";
 
+/*const PORT=config.PORT;*/
+
 const app = express();
 
 app.engine(
@@ -36,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 initializePassport();
+
 app.use(passport.initialize());
 
 app.use(express.static(path.join(__dirname, "../public")));
@@ -73,16 +76,19 @@ io.on("connection", (socket) => {
   });
 });
 
-io.on("error", (error) => console.error(error));
+/*const server=app.listen(PORT,()=>{
+  console.log(`Server escuchando en puerto ${PORT}`);
+});
 
-/*
 const conectar = async () => {
   try {
-    await mongoose.connect("mongodb+srv://Martinez:12345@ejemplo.k2aia89.mongodb.net/test");
+    await mongoose.connect(config.MONGOURL);
     console.log("Conexión a DB establecida");
   } catch (error) {
     console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);
   }
-}
+}*/
 
-conectar();*/
+conectar();
+
+io.on("error", (error) => console.error(error));
