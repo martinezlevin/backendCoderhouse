@@ -32,10 +32,12 @@ app.set("views", path.join(__dirname, "../views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 initializePassport();
 app.use(passport.initialize());
+
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
@@ -71,6 +73,8 @@ io.on("connection", (socket) => {
   });
 });
 
+io.on("error", (error) => console.error(error));
+
 /*
 const conectar = async () => {
   try {
@@ -82,5 +86,3 @@ const conectar = async () => {
 }
 
 conectar();*/
-
-io.on("error", (error) => console.error(error));
