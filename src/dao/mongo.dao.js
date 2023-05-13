@@ -2,66 +2,161 @@ import { cartsModel } from "../models/carts.model.js";
 import { productsModel } from "../models/products.model.js";
 import { messagesModel } from "../models/messages.model.js";
 import { usersModel } from "../models/users.model.js";
+import { ticketsModel } from "../models/tickets.model.js";
 
 export class CartsMongoDao {
-  async createCart() {
-    return await cartsModel.create({ alias: "Mi compra" });
+  async create(docs) {
+    try {
+      let result = await cartsModel.create(docs);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async getCart(cid) {
-    return await cartsModel.findOne({ _id: cid }).populate("products.productId");
+  async getOne(conditions, projection) {
+    try {
+      let result = await cartsModel.findOne(conditions, projection).populate("products.productId");
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async addProduct(cid, pid, qty) {
-    return await cartsModel.updateOne({ _id: cid }, { $push: { products: { productId: pid, quantity: qty } } });
-  }
-  async deleteProduct(cid, pid) {
-    return await cartsModel.updateOne({ _id: cid }, { $pull: { products: { productId: pid } } });
-  }
-  async updateProductQty(cid, pid, qty) {
-    return await cartsModel.updateOne({ _id: cid, "products.productId": pid }, { $inc: { "products.$.quantity": qty } });
-  }
-  async deleteProducts(cid) {
-    return await cartsModel.updateOne({ _id: cid }, { $set: { products: [] } });
+  async updateOne(filter, update) {
+    try {
+      let result = await cartsModel.updateOne(filter, update);
+      if (result.matchedCount) {
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }
 
 export class ProductsMongoDao {
-  async getProducts(query, options) {
-    return await productsModel.paginate(query, options);
+  async getPaginated(filter, options) {
+    try {
+      let result = await productsModel.paginate(filter, options);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async getProduct(pid) {
-    return await productsModel.findOne({ _id: pid });
+  async getOne(conditions, projection) {
+    try {
+      let result = await productsModel.findOne(conditions, projection);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async getProductByCode(code) {
-    return await productsModel.findOne({ code: code });
+  async deleteOne(conditions) {
+    try {
+      let result = await productsModel.deleteOne(conditions);
+      if (result.deletedCount) {
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async deleteProduct(pid) {
-    return await productsModel.deleteOne({ _id: pid });
+  async create(docs) {
+    try {
+      let result = await productsModel.create(docs);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async createProduct(product) {
-    return await productsModel.create(product);
-  }
-  async updateProduct(pid, field, value) {
-    return await productsModel.updateOne({ _id: pid }, { $set: { [field]: value } });
+  async updateOne(filter, update) {
+    try {
+      let result = await productsModel.updateOne(filter, update);
+      if (result.matchedCount) {
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }
 
 export class MessagesMongoDao {
-  async getMessages() {
-    return await messagesModel.find();
+  async get(filter, projection) {
+    try {
+      let result = await messagesModel.find(filter, projection);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async addMessage(data) {
-    return await messagesModel.create(data);
+  async create(docs) {
+    try {
+      let result = await messagesModel.create(docs);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }
 
 export class UsersMongoDao {
-  async getUser(field, value) {
-    return await usersModel.findOne({ [field]: value });
+  async getOne(conditions, projection) {
+    try {
+      let result = await usersModel.findOne(conditions, projection);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async createUser(user) {
-    return await usersModel.create(user);
+  async create(docs) {
+    try {
+      let result = await usersModel.create(docs);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
-  async updateUser(field, value, data) {
-    return await usersModel.updateOne({ [field]: value }, data);
+  async updateOne(filter, update) {
+    try {
+      let result = await usersModel.updateOne(filter, update);
+      if (result.matchedCount) {
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+}
+
+export class TicketsMongoDao {
+  async create(docs) {
+    try {
+      let result = await ticketsModel.create(docs);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 }

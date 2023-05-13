@@ -11,4 +11,6 @@ router.delete("/:cid/product/:pid", (req, res) => cartsApiController.deleteProdu
 
 router.delete("/:cid", (req, res) => cartsApiController.deleteProducts(req, res));
 
+router.post("/:cid/purchase", (req, res) => cartsApiController.sendOrder(req, res));
+
 export default router;

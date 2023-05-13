@@ -2,8 +2,7 @@ import { Router } from "express";
 import productsViewController from "../controllers/productsView.controller.js";
 import cartsViewController from "../controllers/cartsView.controller.js";
 import messagesController from "../controllers/messages.controller.js";
-import { authUser } from "../middlewares/auth.middlewares.js";
-import { passportCall } from "../utils/utils.js";
+import { authorizeUser, passportCall } from "../middlewares/sessions.middlewares.js";
 
 const router = Router();
 
@@ -19,26 +18,26 @@ router.get("/login", (req, res) => {
   res.status(200).render("login", { styles: "login.css" });
 });
 
-router.get("/products", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+router.get("/products", passportCall("jwt"), authorizeUser(["user", "admin"]), async (req, res) => {
   let products = await productsViewController.getProducts(req.query);
   let user = req.user;
   res.setHeader("Content-Type", "text/html");
   res.render("products", { products, user, styles: "products.css" });
 });
 
-router.get("/carts/:cid", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+router.get("/carts/:cid", passportCall("jwt"), authorizeUser(["user", "admin"]), async (req, res) => {
   let cart = await cartsViewController.getCart(req.params.cid);
   res.setHeader("Content-Type", "text/html");
   res.render("cart", { cart, styles: "cart.css" });
 });
 
-router.get("/realtimeproducts", passportCall("jwt"), authUser(["admin"]), async (req, res) => {
+router.get("/realtimeproducts", passportCall("jwt"), authorizeUser(["admin"]), async (req, res) => {
   let products = await productsViewController.getProducts(req.query);
   res.setHeader("Content-Type", "text/html");
   res.render("realTimeProducts", { products, styles: "realTimeProducts.css" });
 });
 
-router.get("/chat", passportCall("jwt"), authUser(["user", "admin"]), async (req, res) => {
+router.get("/chat", passportCall("jwt"), authorizeUser(["user", "admin"]), async (req, res) => {
   let user = req.user;
   let messages = await messagesController.getMessages();
   res.setHeader("Content-Type", "text/html");

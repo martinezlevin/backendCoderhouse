@@ -54,10 +54,15 @@ for (let i = 0; i < addToCartForms.length; i++) {
     let data = { qty: quantity };
 
     try {
-      await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      alert("Producto agregado al carrito");
+      let response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      if (response.status === 201) {
+        alert("Producto agregado al carrito.");
+      } else {
+        alert("Error. Producto no agregado. Vuelva a intentarlo.");
+      }
     } catch (error) {
       console.log(error);
+      alert("Error. Producto no agregado. Vuelva a intentarlo.");
     }
 
     e.target.reset();

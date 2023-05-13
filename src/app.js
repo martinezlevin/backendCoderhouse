@@ -16,8 +16,6 @@ import sessionsRouter from "./routes/sessions.router.js";
 import productsApiController from "./controllers/productsApi.controller.js";
 import messagesController from "./controllers/messages.controller.js";
 
-/*const PORT=config.PORT;*/
-
 const app = express();
 
 app.engine(
@@ -38,7 +36,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 initializePassport();
-
 app.use(passport.initialize());
 
 app.use(express.static(path.join(__dirname, "../public")));
@@ -71,24 +68,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("newMessage", async ({ user, message }) => {
-    await messagesController.addMessage({ user, message });
+    await messagesController.sendMessage({ user, message });
     io.emit("messagesListUpdated");
   });
 });
-
-/*const server=app.listen(PORT,()=>{
-  console.log(`Server escuchando en puerto ${PORT}`);
-});
-
-const conectar = async () => {
-  try {
-    await mongoose.connect(config.MONGOURL);
-    console.log("Conexión a DB establecida");
-  } catch (error) {
-    console.log(`Error al conectarse con el servidor de DB. Errores: ${error}`);
-  }
-}*/
-
-conectar();
 
 io.on("error", (error) => console.error(error));

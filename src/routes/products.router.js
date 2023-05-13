@@ -7,7 +7,7 @@ const router = Router();
 
 router.get("/", (req, res) => productsApiController.getProducts(req, res));
 
-router.get("/:pid", (req, res) => productsApiController.getProductById(req, res));
+router.get("/:pid", (req, res) => productsApiController.getProduct(req, res));
 
 router.post("/", addProductMid, (req, res) => productsApiController.addProduct(req, res));
 
