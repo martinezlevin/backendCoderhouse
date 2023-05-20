@@ -12,7 +12,7 @@ export class CartsMongoService {
   async getById(cartId) {
     let conditions = { _id: cartId };
     let result = await this.dao.getOne(conditions);
-    return new CartDto(result);
+    return result ? new CartDto(result) : null;
   }
   async addProduct(cartId, productId, productQty) {
     let filter = { _id: cartId };
@@ -34,7 +34,6 @@ export class CartsMongoService {
     let update = { $set: { products: [] } };
     return await this.dao.updateOne(filter, update);
   }
-  async sendOrder(cartID, purchaser) {}
 }
 
 export class ProductsMongoService {
@@ -104,10 +103,10 @@ export class UsersMongoService {
     let conditions = { email: userEmail };
     return await this.dao.getOne(conditions);
   }
-  async getCurrentByEmail(userEmail) {
-    let conditions = { email: userEmail };
+  async getCurrentById(userId) {
+    let conditions = { _id: userId };
     let result = await this.dao.getOne(conditions);
-    return new CurrentUserDto(result);
+    return result ? new CurrentUserDto(result) : null;
   }
   async create(userData) {
     let docs = { ...userData, lastOrder: 100 };

@@ -4,11 +4,12 @@ import { usersService } from "../dao/factory.js";
 
 class SessionsController {
   async getCurrent(req, res) {
-    let result = await usersService.getCurrentByEmail(req.user.email);
+    let result = await usersService.getCurrentById(req.user.id);
     if (result) {
       return res.status(200).send({ status: "Éxito.", result });
     } else {
-      return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+      req.logger.debug("Error al intentar obtener los datos del usuario actual.");
+      return res.status(500).send({ status: "Error.", error: "Error al intentar obtener los datos del usuario actual." });
     }
   }
 

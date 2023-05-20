@@ -1,4 +1,5 @@
 import { productsService } from "../dao/factory.js";
+import { createFakeProduct } from "../utils/utils.js";
 
 class ProductsApiController {
   async getProducts(req, res) {
@@ -6,7 +7,8 @@ class ProductsApiController {
     if (result) {
       return res.status(200).send({ status: "Éxito.", result });
     } else {
-      return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+      req.logger.debug("Error al intentar obtener productos.");
+      return res.status(500).send({ status: "Error.", error: "Error al intentar obtener productos." });
     }
   }
 
@@ -15,38 +17,30 @@ class ProductsApiController {
     if (result) {
       return res.status(200).send({ status: "Éxito.", result });
     } else {
-      return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+      req.logger.debug("Error al intentar obtener productos.");
+      return res.status(500).send({ status: "Error.", error: "Error al intentar obtener productos." });
     }
   }
 
   async addProduct(req, res) {
-    let { title, description, code, price, status, stock, category, thumbnails } = req.body;
-    let product = await productsService.getByCode(code);
-    if (product) {
+    let codeExists = await productsService.getByCode(req.body.code);
+    if (codeExists) {
+      req.logger.debug("Producto no añadido. El código ya existe.");
       return res.status(400).send({ status: "Error.", error: "Producto no añadido. El código ya existe." });
     }
-    let result = await productsService.create({
-      title: title,
-      description: description,
-      code: code,
-      price: price,
-      status: status,
-      stock: stock,
-      category: category,
-      thumbnails: thumbnails,
-    });
+    let result = await productsService.create(req.body);
     if (result) {
       return res.status(201).send({ status: "Éxito.", result: "Producto agregado con éxito." });
     } else {
-      return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+      req.logger.debug("Error al intentar agregar el producto.");
+      return res.status(500).send({ status: "Error.", error: "Error al intentar agregar el producto." });
     }
   }
 
   async updateProduct(req, res) {
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
-    let pid = req.params.pid;
-    let product = await productsService.getById(pid);
-    if (product) {
+    let productExists = await productsService.getById(req.params.pid);
+    if (productExists) {
       let update = {};
       status === false && (update.status = status);
       status === true && (update.status = status);
@@ -57,13 +51,15 @@ class ProductsApiController {
       stock && (update.stock = stock);
       category && (update.category = category);
       thumbnails && (update.thumbnails = thumbnails);
-      let result = await productsService.updateById(pid, update);
+      let result = await productsService.updateById(req.params.pid, update);
       if (result) {
         return res.status(200).send({ status: "Éxito.", result: "Producto actualizado con éxito." });
       } else {
-        return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+        req.logger.debug("Error al intentar actualizar el producto.");
+        return res.status(500).send({ status: "Error.", error: "Error al intentar actualizar el producto." });
       }
     } else {
+      req.logger.debug("Producto no encontrado.");
       return res.status(400).send({ status: "Error.", error: "Producto no encontrado." });
     }
   }
@@ -73,7 +69,8 @@ class ProductsApiController {
     if (result) {
       return res.status(200).send({ status: "Éxito.", result: `Producto eliminado con éxito.` });
     } else {
-      return res.status(500).send({ status: "Error.", error: "Algo salió mal, inténtalo de nuevo más tarde." });
+      req.logger.debug("Error al intentar eliminar el producto.");
+      return res.status(500).send({ status: "Error.", error: "Error al intentar eliminar el producto." });
     }
   }
 
@@ -92,6 +89,7 @@ class ProductsApiController {
         };
       }
     } catch (error) {
+      req.logger.debug("Error al intentar eliminar el producto.");
       return {
         success: false,
         message: "Error del Servidor.",
@@ -116,30 +114,41 @@ class ProductsApiController {
           message: "Producto no añadido. Error: El producto ya existe.",
         };
       }
-
       price = Number(price);
       stock = Number(stock);
       status === "false" ? (status = false) : (status = true);
       await productsService.create({
-        title: title,
-        description: description,
-        code: code,
-        price: price,
-        status: status,
-        stock: stock,
-        category: category,
-        thumbnails: thumbnails,
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnails,
       });
       return {
         success: true,
         message: "Producto agregado con éxito.",
       };
     } catch (error) {
+      req.logger.debug("Error al intentar agregar el producto.");
       return {
         success: false,
         message: "Error del Servidor.",
       };
     }
+  }
+
+  async getMockingProducts(req, res) {
+    let products = [];
+    let limit = req.query.qty || 100;
+
+    for (let i = 0; i < limit; i++) {
+      products.push(createFakeProduct());
+    }
+
+    return res.status(200).send({ status: "Éxito.", products });
   }
 }
 

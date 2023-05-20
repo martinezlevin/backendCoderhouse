@@ -3,14 +3,14 @@ import cartsApiController from "../controllers/cartsApi.controller.js";
 
 const router = Router();
 
-router.get("/:cid", (req, res) => cartsApiController.getCart(req, res));
+router.get("/:cid", cartsApiController.getCart);
 
-router.post("/:cid/product/:pid", (req, res) => cartsApiController.addProduct(req, res));
+router.post("/:cid/product/:pid", cartsApiController.addProduct);
 
-router.delete("/:cid/product/:pid", (req, res) => cartsApiController.deleteProduct(req, res));
+router.delete("/:cid/product/:pid", cartsApiController.deleteProduct);
 
-router.delete("/:cid", (req, res) => cartsApiController.deleteProducts(req, res));
+router.delete("/:cid", cartsApiController.deleteProducts);
 
-router.post("/:cid/purchase", (req, res) => cartsApiController.sendOrder(req, res));
+router.post("/:cid/purchase", cartsApiController.sendOrder);
 
 export default router;

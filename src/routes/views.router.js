@@ -2,7 +2,7 @@ import { Router } from "express";
 import productsViewController from "../controllers/productsView.controller.js";
 import cartsViewController from "../controllers/cartsView.controller.js";
 import messagesController from "../controllers/messages.controller.js";
-import { authorizeUser, passportCall } from "../middlewares/sessions.middlewares.js";
+import { authorizeUser, passportCall } from "../middlewares/sessions.middleware.js";
 
 const router = Router();
 

@@ -1,4 +1,5 @@
 import { productsService } from "../dao/factory.js";
+import { logger } from "../utils/logger.js";
 
 class ProductsViewController {
   async getProducts(query) {
@@ -11,9 +12,10 @@ class ProductsViewController {
 
     let products = await productsService.getPaginated(query);
     if (!products) {
+      logger.debug("Error al intentar obtener productos.");
       return {
         status: "Error.",
-        error: "Algo salió mal, inténtalo de nuevo más tarde.",
+        error: "Error al intentar obtener productos.",
       };
     }
     let { docs, totalPages, page, prevPage, nextPage, hasPrevPage, hasNextPage } = products;
@@ -39,19 +41,20 @@ class ProductsViewController {
     } else {
       nextLink = null;
     }
-    return { status: "Éxito.", payload: docs, totalPages, prevPage, nextPage, page, hasPrevPage, hasNextPage, prevLink, nextLink };
+    return { status: "Éxito", payload: docs, totalPages, prevPage, nextPage, page, hasPrevPage, hasNextPage, prevLink, nextLink };
   }
 
   async getProduct(productId) {
     try {
       let product = await productsService.getById(productId);
       if (product) {
-        return { status: "Éxito.", payload: product };
-      } else {
-        return { status: "Extraviado." };
+        return { status: "Éxito", payload: product };
+      } else 
+        logger.debug("Producto no encontrado.");
+        return { status: "No encontrado." };
       }
     } catch (error) {
-      console.log(error);
+      logger.debug(`${error.message}`);
       return { status: "Error." };
     }
   }

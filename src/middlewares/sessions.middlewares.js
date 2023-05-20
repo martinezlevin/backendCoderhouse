@@ -25,7 +25,7 @@ export const passportCall = (strategy) => {
       if (err) return next(err);
       if (!user) {
         if (!info) {
-          return res.status(401).send("unauthenticated");
+          return res.status(401).send("Sin autenticar.");
         } else {
           return res.status(401).send({ error: info.messages || info.toString() });
         }

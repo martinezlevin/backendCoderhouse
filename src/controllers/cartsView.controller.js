@@ -1,4 +1,5 @@
 import { cartsService } from "../dao/factory.js";
+import { logger } from "../utils/logger.js";
 
 class CartsViewController {
   async getCart(cartId) {
@@ -6,9 +7,10 @@ class CartsViewController {
     if (result) {
       return result;
     } else {
+      logger.debug("Error al intentar obtener el carrito.");
       return {
         status: "Error",
-        error: "Algo salió mal, inténtalo de nuevo más tarde.",
+        error: "Error al intentar obtener el carrito.",
       };
     }
   }

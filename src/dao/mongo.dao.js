@@ -3,6 +3,7 @@ import { productsModel } from "../models/products.model.js";
 import { messagesModel } from "../models/messages.model.js";
 import { usersModel } from "../models/users.model.js";
 import { ticketsModel } from "../models/tickets.model.js";
+import { logger } from "../utils/logger.js";
 
 export class CartsMongoDao {
   async create(docs) {
@@ -10,7 +11,7 @@ export class CartsMongoDao {
       let result = await cartsModel.create(docs);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -19,7 +20,7 @@ export class CartsMongoDao {
       let result = await cartsModel.findOne(conditions, projection).populate("products.productId");
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -32,7 +33,7 @@ export class CartsMongoDao {
         return null;
       }
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -44,7 +45,7 @@ export class ProductsMongoDao {
       let result = await productsModel.paginate(filter, options);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -53,7 +54,7 @@ export class ProductsMongoDao {
       let result = await productsModel.findOne(conditions, projection);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -66,7 +67,7 @@ export class ProductsMongoDao {
         return null;
       }
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -75,7 +76,7 @@ export class ProductsMongoDao {
       let result = await productsModel.create(docs);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -88,7 +89,7 @@ export class ProductsMongoDao {
         return null;
       }
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -100,7 +101,7 @@ export class MessagesMongoDao {
       let result = await messagesModel.find(filter, projection);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -109,7 +110,7 @@ export class MessagesMongoDao {
       let result = await messagesModel.create(docs);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -121,7 +122,7 @@ export class UsersMongoDao {
       let result = await usersModel.findOne(conditions, projection);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -130,7 +131,7 @@ export class UsersMongoDao {
       let result = await usersModel.create(docs);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -143,7 +144,7 @@ export class UsersMongoDao {
         return null;
       }
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }
@@ -155,7 +156,7 @@ export class TicketsMongoDao {
       let result = await ticketsModel.create(docs);
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(`${new Date().toLocaleString()} - ${error.message}`);
       return null;
     }
   }

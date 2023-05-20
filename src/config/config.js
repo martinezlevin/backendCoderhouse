@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 
-const environments = ["development", "staging", "production"]
-
-const currentEnvironment = environments[0]
+const environments = ["development", "staging", "production"];
+export const currentEnvironment = environments[0];
 
 dotenv.config({
   override: true,
@@ -19,4 +18,9 @@ export const config = {
   githubCallbackUrl: process.env.GITHUB_CALLBACK_URL,
   adminMail: process.env.ADMIN_MAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
+  mailingUser: process.env.MAILING_USER,
+  mailingPassword: process.env.MAILING_PASSWORD,
+  mailingName: process.env.MAILING_NAME,
+  mailingHost: process.env.MAILING_HOST,
+  mailingPort: process.env.MAILING_PORT,
 };
