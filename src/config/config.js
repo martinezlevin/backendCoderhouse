@@ -21,6 +21,6 @@ export const config = {
   mailingUser: process.env.MAILING_USER,
   mailingPassword: process.env.MAILING_PASSWORD,
   mailingName: process.env.MAILING_NAME,
-  mailingHost: process.env.MAILING_HOST,
+  mailingService: process.env.MAILING_SERVICE,
   mailingPort: process.env.MAILING_PORT,
 };

@@ -1,4 +1,4 @@
-import { productsService } from "../dao/factory.js";
+import { productsService, usersService } from "../dao/factory.js";
 import { createFakeProduct } from "../utils/utils.js";
 
 class ProductsApiController {
@@ -39,8 +39,8 @@ class ProductsApiController {
 
   async updateProduct(req, res) {
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
-    let productExists = await productsService.getById(req.params.pid);
-    if (productExists) {
+    let product = await productsService.getById(req.params.pid);
+    if (product) {
       let update = {};
       status === false && (update.status = status);
       status === true && (update.status = status);
@@ -74,10 +74,14 @@ class ProductsApiController {
     }
   }
 
-  async deleteProductSocket(productId) {
+  async deleteProductSocket(productId, user) {
     try {
-      let product = await productsService.deleteById(productId);
-      if (product) {
+      let product = await productsService.getById(productId);
+      if (!product) return { success: false, message: "Producto no encontrado." };
+      if (user.role === "Premium" && user.id !== product.owner)
+        return { success: false, message: "El usuario Premium no puede eliminar productos que no sean propios." };
+      let result = await productsService.deleteById(productId);
+      if (result) {
         return {
           success: true,
           message: "Producto eliminado con éxito.",
@@ -85,7 +89,7 @@ class ProductsApiController {
       } else {
         return {
           success: false,
-          message: "Producto no encontrado.",
+          message: "Error al intentar eliminar el producto.",
         };
       }
     } catch (error) {
@@ -99,7 +103,7 @@ class ProductsApiController {
 
   async addProductSocket(productData) {
     try {
-      let { title, description, code, price, status, stock, category, thumbnails } = productData;
+      let { title, description, code, price, status, stock, category, thumbnails, owner } = productData;
       let emptyField = !(title && description && code && price && stock && category);
       if (emptyField) {
         return {
@@ -126,6 +130,7 @@ class ProductsApiController {
         stock,
         category,
         thumbnails,
+        owner,
       });
       return {
         success: true,

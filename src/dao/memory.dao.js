@@ -12,3 +12,6 @@ export class UsersMemoryDao {
 
 export class TicketsMemoryDao {
 }
+
+export class TokensMemoryDao {
+}

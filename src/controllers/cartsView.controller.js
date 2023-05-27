@@ -9,7 +9,7 @@ class CartsViewController {
     } else {
       logger.debug("Error al intentar obtener el carrito.");
       return {
-        status: "Error",
+        status: "Error.",
         error: "Error al intentar obtener el carrito.",
       };
     }

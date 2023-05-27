@@ -1,0 +1,1 @@
+console.log("forgotPassword.js funciona correctamente.");

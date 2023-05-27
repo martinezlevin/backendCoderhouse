@@ -1,9 +1,9 @@
 let sendOrderBtn = document.getElementById("sendOrderBtn");
 
 sendOrderBtn.addEventListener("click", async () => {
-  let userdata = await fetch("/api/sessions/current");
-  let parsedUserData = await userdata.json();
-  let user = parsedUserData.result
+  let res = await fetch("/api/sessions/current");
+  let json = await res.json();
+  let user = json.result;
   let body = JSON.stringify(user);
   let url = sendOrderBtn.dataset.href;
 

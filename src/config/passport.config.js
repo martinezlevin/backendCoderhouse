@@ -6,10 +6,7 @@ import bcrypt from "bcrypt";
 import { config } from "./config.js";
 import { cartsService, usersService } from "../dao/factory.js";
 import { CurrentUserDto } from "../dto/users.dto.js";
-
-const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-
-const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
+import { createHash, isValidPassword } from "../utils/utils.js";
 
 const extractToken = (req) => {
   return req.cookies.idToken || null;
@@ -88,7 +85,7 @@ export const initializePassport = () => {
           if (currentUser) return done(null, false);
 
           let isAdmin = username === config.adminMail && password === config.adminPassword;
-          let role = isAdmin ? "admin" : "user";
+          let role = isAdmin ? "Administrador" : "Usuario";
           let cart = await cartsService.create({ alias: "Mi compra" });
           let user = await usersService.create({
             firstName,

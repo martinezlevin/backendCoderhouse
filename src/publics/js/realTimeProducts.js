@@ -4,15 +4,21 @@ let addProductForm = document.getElementById("addProductForm");
 let deleteProductForm = document.getElementById("deleteProductForm");
 let toast = document.getElementById("toast");
 
-deleteProductForm.addEventListener("submit", (e) => {
+deleteProductForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  let id = e.target[0].value.trim();
-  socket.emit("deleteProduct", id);
+  let userdata = await fetch("/api/sessions/current");
+  let parsedUserData = await userdata.json();
+  let user = parsedUserData.result;
+  let productId = e.target[0].value.trim();
+  socket.emit("deleteProduct", productId, user);
   e.target.reset();
 });
 
-addProductForm.addEventListener("submit", (e) => {
+addProductForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  let userdata = await fetch("/api/sessions/current");
+  let parsedUserData = await userdata.json();
+  let user = parsedUserData.result;
   let product = {
     title: e.target[0].value.trim(),
     description: e.target[1].value.trim(),
@@ -22,6 +28,7 @@ addProductForm.addEventListener("submit", (e) => {
     stock: e.target[5].value.trim(),
     category: e.target[6].value.trim(),
     thumbnails: [e.target[7].value.trim(), e.target[8].value.trim()],
+    owner: user.id,
   };
   socket.emit("addProduct", product);
   e.target.reset();
@@ -35,7 +42,7 @@ const showToast = (message) => {
   }, 2000);
 };
 
-window.addEventListener("load", () => showToast("Lista actualizada"));
+window.addEventListener("load", () => showToast("Lista actualizada!"));
 
 socket.on("productListUpdated", () => {
   location.reload();

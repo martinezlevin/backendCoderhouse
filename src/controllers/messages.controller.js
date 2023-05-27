@@ -9,7 +9,7 @@ class MessagesController {
     } else {
       logger.debug("Error al intentar recibir mensajes.");
       return {
-        status: "Error",
+        status: "Error.",
         message: "Error al intentar recibir mensajes.",
       };
     }
@@ -19,13 +19,13 @@ class MessagesController {
     let result = await messagesService.send({ user, message });
     if (result) {
       return {
-        status: "Éxito",
+        status: "Éxito.",
         message: "Mensaje enviado con éxito.",
       };
     } else {
       logger.debug("Error al intentar enviar el mensaje.");
       return {
-        status: "Error",
+        status: "Error.",
         message: "Error al intentar enviar el mensaje.",
       };
     }

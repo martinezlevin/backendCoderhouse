@@ -6,6 +6,7 @@ export let productsService;
 export let messagesService;
 export let usersService;
 export let ticketsService;
+export let tokensService;
 
 switch (config.persistence) {
   case "mongo":
@@ -15,19 +16,22 @@ switch (config.persistence) {
       ProductsMongoDao,
       MessagesMongoDao,
       UsersMongoDao,
-      TicketsMongoDao
+      TicketsMongoDao,
+      TokensMongoDao,
     } = await import("./mongo.dao.js");
     let {
       CartsMongoService,
       ProductsMongoService,
       MessagesMongoService, UsersMongoService,
-      TicketsMongoService
+      TicketsMongoService,
+      TokensMongoService,
     } = await import("../services/mongo.service.js");
     cartsService = new CartsMongoService(new CartsMongoDao());
     productsService = new ProductsMongoService(new ProductsMongoDao());
     messagesService = new MessagesMongoService(new MessagesMongoDao());
     usersService = new UsersMongoService(new UsersMongoDao());
     ticketsService = new TicketsMongoService(new TicketsMongoDao);
+    tokensService = new TokensMongoService(new TokensMongoDao);
     break;
 
   case "memory":
@@ -36,20 +40,23 @@ switch (config.persistence) {
       ProductsMemoryDao,
       MessagesMemoryDao,
       UsersMemoryDao,
-      TicketsMemoryDao
+      TicketsMemoryDao,
+      TokensMemoryDao,
     } = await import("./memory.dao.js");
     let {
       CartsMemoryService,
       ProductsMemoryService,
       MessagesMemoryService,
       UsersMemoryService,
-      TicketsMemoryService
+      TicketsMemoryService,
+      TokensMemoryService,
     } = await import("../services/memory.service.js");
     cartsService = new CartsMemoryService(new CartsMemoryDao());
     productsService = new ProductsMemoryService(new ProductsMemoryDao());
     messagesService = new MessagesMemoryService(new MessagesMemoryDao());
     usersService = new UsersMemoryService(new UsersMemoryDao());
     ticketsService = new TicketsMemoryService(new TicketsMemoryDao());
+    tokensService = new TokensMemoryService(new TokensMemoryDao());
     break;
 
   default:

@@ -1,4 +1,4 @@
-export class CartsMemoryService {
+  export class CartsMemoryService {
     constructor(dao) {
       this.dao = dao;
     }
@@ -48,3 +48,11 @@ export class CartsMemoryService {
     }
     async send(ticketData) {}
   }
+
+export class TokensMemoryService {
+  constructor(dao) {
+    this.dao = dao;
+  }
+  async addResetToken(userEmail, token) {}
+  async getResetToken(userEmail) {}
+}

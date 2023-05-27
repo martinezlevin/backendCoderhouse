@@ -5,6 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import compression from "express-compression";
+import mailer from "./utils/mailer.js";
 
 import { config } from "./config/config.js";
 import { __dirname } from "./utils/utils.js";
@@ -50,15 +51,7 @@ app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
-app.use("/loggerTest", (req, res) => {
-  req.logger.fatal("logger fatal test ok");
-  req.logger.error("logger error test ok");
-  req.logger.warning("logger warning test ok");
-  req.logger.info("logger info test ok");
-  req.logger.http("logger http test ok");
-  req.logger.debug("logger debug test ok");
-  res.status(200).send("logger test done")
-});
+
 app.use("*", (req, res) => {
   return req.user ? res.redirect("/products") : res.redirect("/login");
 });
@@ -70,8 +63,8 @@ const io = new Server(httpServer);
 io.on("connection", (socket) => {
   console.log("New client connected");
 
-  socket.on("deleteProduct", async (id) => {
-    let response = await productsApiController.deleteProductSocket(id);
+  socket.on("deleteProduct", async (productId, user) => {
+    let response = await productsApiController.deleteProductSocket(productId, user);
     socket.emit("deleteProductRes", response);
     if (response.success) {
       socket.broadcast.emit("productListUpdated");

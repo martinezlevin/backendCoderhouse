@@ -4,6 +4,11 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const productsCollection = "products";
 
 const productsSchema = new Schema({
+  owner: {
+    type: String,
+    default: "admin",
+    required: true,
+  },
   code: {
     type: String,
     required: true,
