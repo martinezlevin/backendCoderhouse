@@ -53,12 +53,13 @@ class ProductsViewController {
         logger.debug("Producto no encontrado.");
         return { status: "No encontrado." };
       }
-    } catch (error) {
+    
+    catch (error) {
       logger.debug(`${error.message}`);
       return { status: "Error." };
     }
   }
 }
 
-const productsViewController = new ProductsViewController();
-export default productsViewController;
+  const productsViewController = new ProductsViewController();
+  export default productsViewController;

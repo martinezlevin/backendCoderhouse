@@ -1,8 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import github from "passport-github2";
-import jwt from "passport-jwt";
-import bcrypt from "bcrypt";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { config } from "./config.js";
 import { cartsService, usersService } from "../dao/factory.js";
 import { CurrentUserDto } from "../dto/users.dto.js";
@@ -15,14 +14,14 @@ const extractToken = (req) => {
 export const initializePassport = () => {
   passport.use(
     "jwt",
-    new jwt.Strategy(
+    new JwtStrategy(
       {
-        jwtFromRequest: jwt.ExtractJwt.fromExtractors([extractToken]),
+        jwtFromRequest: ExtractJwt.fromExtractors([extractToken]),
         secretOrKey: config.secretKey,
       },
-      (token, done) => {
+      (jwt_payload, done) => {
         try {
-          return done(null, token.user);
+          return done(null, jwt_payload.user);
         } catch (error) {
           return done(error);
         }

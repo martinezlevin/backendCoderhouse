@@ -1,11 +1,15 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 import { config } from "../config/config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
+
+export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+export const isValidPassword = (password, user) => bcrypt.compareSync(password, user.password);
 
 export class DB {
   constructor() {
@@ -43,3 +47,7 @@ export const createFakeProduct = () => {
     ],
   };
 };
+
+export const createFakePass = () => {
+  return faker.string.alphanumeric(8);
+}

@@ -5,7 +5,8 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import compression from "express-compression";
-import mailer from "./utils/mailer.js";
+import swaggerUiExpress from "swagger-ui-express";
+import swaggerSpecs from "./config/swagger.config.js";
 
 import { config } from "./config/config.js";
 import { __dirname } from "./utils/utils.js";
@@ -46,12 +47,13 @@ app.use(compression());
 
 app.use(addLogger);
 
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerSpecs));
+
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
-
 app.use("*", (req, res) => {
   return req.user ? res.redirect("/products") : res.redirect("/login");
 });

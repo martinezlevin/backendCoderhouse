@@ -5,10 +5,10 @@ class CartsApiController {
     res.setHeader("Content-Type", "application/json");
     let result = await cartsService.getById(req.params.cid);
     if (result) {
-      return res.status(200).json({ status: "success", result });
+      return res.status(200).json({ status: "Éxito", result });
     } else {
-      req.logger.debug("error trying to get cart");
-      return res.status(500).json({ status: "error", error: "error trying to get cart" });
+      req.logger.debug("Error al intentar obtener el carrito");
+      return res.status(500).json({ status: "Error", error: "Error al intentar obtener el carrito" });
     }
   }
 
@@ -18,10 +18,10 @@ class CartsApiController {
     let { qty } = req.body;
     let result = (await cartsService.updateProductQty(cid, pid, qty)) || (await cartsService.addProduct(cid, pid, qty));
     if (result) {
-      return res.status(201).json({ status: "success", result: "Product added successfully" });
+      return res.status(201).json({ status: "Éxito", result: "Producto añadido con éxito" });
     } else {
-      req.logger.debug("error trying to add product");
-      return res.status(500).json({ status: "error", error: "error trying to add product" });
+      req.logger.debug("Error al intentar agregar el producto");
+      return res.status(500).json({ status: "error", error: "Error al intentar agregar el producto" });
     }
   }
 
@@ -30,10 +30,10 @@ class CartsApiController {
     let { cid, pid } = req.params;
     let result = await cartsService.deleteProduct(cid, pid);
     if (result) {
-      return res.status(200).json({ status: "success", result: "Product deleted successfully" });
+      return res.status(200).json({ status: "Éxito", result: "Producto eliminado con éxito" });
     } else {
-      req.logger.debug("error trying to delete product");
-      return res.status(500).json({ status: "error", error: "error trying to delete product" });
+      req.logger.debug("Error al intentar eliminar el producto");
+      return res.status(500).json({ status: "Error", error: "Error al intentar eliminar el producto" });
     }
   }
 
@@ -42,10 +42,10 @@ class CartsApiController {
     let { cid } = req.params;
     let result = await cartsService.deleteProducts(cid);
     if (result) {
-      return res.status(200).json({ status: "success", result: "Products deleted successfully" });
+      return res.status(200).json({ status: "Éxito", result: "Productos eliminados con éxito" });
     } else {
-      req.logger.debug("error trying to delete products");
-      return res.status(500).json({ status: "error", error: "error trying to delete products" });
+      req.logger.debug("Error al intentar eliminar productos");
+      return res.status(500).json({ status: "Error", error: "Error al intentar eliminar productos" });
     }
   }
 
@@ -60,7 +60,7 @@ class CartsApiController {
       }
     });
     if (outOfStock.length) {
-      return res.status(200).json({ status: "out of stock", outOfStock });
+      return res.status(200).json({ status: "Agotado", outOfStock });
     }
     let nextOrder = req.body.lastOrder + 1;
     let order = {
@@ -76,10 +76,10 @@ class CartsApiController {
     if (result) {
       await usersService.updateByEmail(req.body.email, { lastOrder: nextOrder });
       await cartsService.deleteProducts(cart._id);
-      return res.status(201).json({ status: "success", result: "Products deleted successfully" });
+      return res.status(201).json({ status: "Éxito", result: "Productos eliminados con éxito" });
     } else {
-      req.logger.debug("error trying to send order");
-      return res.status(500).json({ status: "error", error: "error trying to send order" });
+      req.logger.debug("Error al intentar enviar el pedido");
+      return res.status(500).json({ status: "Error", error: "Error al intentar enviar el pedido" });
     }
   }
 }

@@ -1,0 +1,234 @@
+paths:
+  /api/products/:
+    get:
+      tags:
+        - Products
+      summary: Get many paginated products 
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    $ref: "#components/schemas/paginatedProducts"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to get products
+    post:
+      tags:
+        - Products
+      summary: Create one new product
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Product add success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: Code already exists
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to add product 
+  /api/products/{pid}:
+    get:
+      tags:
+        - Products
+      summary: Get one product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            example: 640f7953079c90d4dbf69cd9
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    $ref: "#components/schemas/product"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to get product
+    put:
+      tags:
+        - Products
+      summary: Update one product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            example: 640f7953079c90d4dbf69cd9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Product update success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: Product not found
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to update product
+    delete:
+      tags:
+        - Products
+      summary: Delete one product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            example: 640f7953079c90d4dbf69cd9
+      responses:
+        "200":
+          description: none
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Product delete success
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to delete product

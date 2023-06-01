@@ -31,7 +31,12 @@ switch (currentEnvironment) {
     ];
     break;
   case "staging":
-    currentTransports = [new winston.transports.Console({ level: "debug" })];
+    currentTransports = [
+      new winston.transports.Console({
+        level: "debug",
+        format: winston.format.combine(winston.format.colorize({ colors: customLevelOptions.colors }), winston.format.simple()),
+      }),
+    ];
     break;
   case "production":
     currentTransports = [

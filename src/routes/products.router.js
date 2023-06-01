@@ -5,8 +5,6 @@ import { verifyProductProperties } from "../middlewares/products.middleware.js";
 
 const router = Router();
 
-router.get("/mockingproducts", productsApiController.getMockingProducts);
-
 router.get("/:pid", productsApiController.getProduct);
 
 router.get("/", productsApiController.getProducts);

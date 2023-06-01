@@ -1,4 +1,4 @@
-import { logger } from "../utils/logger.js";
+import { logger } from "../utils/logger.utils.js";
 
 export const addLogger = (req, res, next) => {
   req.logger = logger;

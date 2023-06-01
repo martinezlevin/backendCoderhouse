@@ -13,6 +13,15 @@ class Mailer {
     });
   }
 
+  async sendPassResetLink(email, token) {
+    return await this.client.sendMail({
+      from: `${config.mailingName} <${config.mailingUser}>`,
+      to: email,
+      subject: "Restablecer contraseña",
+      html: `<p>Toca <a href="http://localhost:8080/passwordreset/${email}/${token}">aquí</a> para reestablecer tu contraseña.</p>`,
+    });
+  }
+
   async send(to, subject, html, attachments = []) {
     return await this.client.sendMail({
       from: `${config.mailingName} <${config.mailingUser}>`,

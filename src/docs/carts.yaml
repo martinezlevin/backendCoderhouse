@@ -1,0 +1,263 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      tags:
+        - Carts
+      summary: Get one cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart ID
+          schema:
+            type: string
+            example: 645d2ce4679fc79f9ff031e9
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    $ref: "#components/schemas/cart"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to get cart
+    delete:
+      tags:
+        - Carts
+      summary: Delete all products in cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart ID
+          schema:
+            type: string
+            example: 645d2ce4679fc79f9ff031e9
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Products delete success
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to delete products
+  /api/carts/{cid}/product/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: Add a product item to a cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart ID
+          schema:
+            type: string
+            example: 645d2ce4679fc79f9ff031e9
+        - name: pid
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            example: 640f7953079c90d4dbf69cd9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qty:
+                  type: number
+                  description: Quantity added to cart
+                  example: 2
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Product add success
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to add product 
+    delete:
+      tags:
+        - Carts
+      summary: Remove a product item from a cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart ID
+          schema:
+            type: string
+            example: 645d2ce4679fc79f9ff031e9
+        - name: pid
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            example: 640f7953079c90d4dbf69cd9
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Product delete success
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to delete product 
+  /api/carts/{cid}/purchase:
+    post:
+      tags:
+        - Carts
+      summary: Send purchase order
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart ID
+          schema:
+            type: string
+            example: 645d2ce4679fc79f9ff031e9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/userData"
+      responses:
+        "200":
+          description: OK. One or more products out of stock.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: out of stock
+                  outOfStock:
+                    type: array
+                    description: list of products ID out of stock
+                    example: ["640f7953079c90d4dbf69cd9"]
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: success
+                  result:
+                    type: string
+                    description: result description
+                    example: Order send success
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: request result
+                    example: error
+                  error:
+                    type: string
+                    description: error description
+                    example: error trying to send order
