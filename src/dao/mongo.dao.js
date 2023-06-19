@@ -3,7 +3,7 @@ import { productsModel } from "../models/products.model.js";
 import { messagesModel } from "../models/messages.model.js";
 import { usersModel } from "../models/users.model.js";
 import { ticketsModel } from "../models/tickets.model.js";
-import { logger } from "../utils/logger.js";
+import { logger } from "../utils/logger.utils.js";
 import { tokensModel } from "../models/tokens.model.js";
 
 export class CartsMongoDao {
