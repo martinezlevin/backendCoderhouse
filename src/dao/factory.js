@@ -25,7 +25,7 @@ switch (config.persistence) {
       MessagesMongoService, UsersMongoService,
       TicketsMongoService,
       TokensMongoService,
-    } = await import("../services/mongo.service.js");
+    } = await import("../service/mongo.service.js");
     cartsService = new CartsMongoService(new CartsMongoDao());
     productsService = new ProductsMongoService(new ProductsMongoDao());
     messagesService = new MessagesMongoService(new MessagesMongoDao());
