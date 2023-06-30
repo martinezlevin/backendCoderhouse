@@ -1,4 +1,4 @@
-mport dotenv from "dotenv";
+import dotenv from "dotenv";
 
 const environments = ["development", "staging", "production"];
 export const currentEnvironment = environments[0];
