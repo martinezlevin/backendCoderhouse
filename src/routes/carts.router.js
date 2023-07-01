@@ -1,16 +1,38 @@
 import { Router } from "express";
-import cartsApiController from "../controllers/cartsApi.controller.js";
+import cartsController from "../controllers/carts.controller.js";
+import {
+  authorizeUser,
+  passportCall,
+} from "../middlewares/sessions.middleware.js";
 
-const router = Router();
+const cartsRouter = Router();
 
-router.get("/:cid", cartsApiController.getCart);
+cartsRouter.get(
+  "/:cid",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  cartsController.getCart
+);
 
-router.post("/:cid/product/:pid", cartsApiController.addProduct);
+cartsRouter.post(
+  "/:cid/product/:pid",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  cartsController.addProduct
+);
 
-router.delete("/:cid/product/:pid", cartsApiController.deleteProduct);
+cartsRouter.delete(
+  "/:cid/product/:pid",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  cartsController.deleteProduct
+);
 
-router.delete("/:cid", cartsApiController.deleteProducts);
+cartsRouter.delete(
+  "/:cid",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  cartsController.deleteProducts
+);
 
-router.post("/:cid/purchase", cartsApiController.sendOrder);
-
-export default router;
+export default cartsRouter;

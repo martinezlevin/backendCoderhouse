@@ -1,14 +1,77 @@
-<h1>Registrarse</h1>
-<form action="/api/sessions/logup" method="post">
-  <input type="text" placeholder="Nombre" name="firstName" />
-  <input type="text" placeholder="Apellido" name="lastName" />
-  <input type="email" placeholder="Correo electrónico" name="email" />
-  <input type="password" placeholder="Contraseña" name="password" />
-  <input type="number" placeholder="Edad" name="age" />
-  <br />
-  <br />
-  <input type="submit" value="Registrarse">
-</form>
-<p>Ya tienes cuenta? <a href="/login">Ingresa</a></p>
+<div class="container d-flex min-vh-100">
+  <div class="row justify-content-center align-content-center">
+    <div class="col col-sm-8 col-md-12 col-lg-10 col-xl-8 col-xxl-3 bg-body-tertiary border rounded" >
+      <h1>Crea tu cuenta</h1>
+      <form id="formLogup" class="mb-0 needs-validation" novalidate>
+        <div class="row">
+          <div class="col-md-4 pb-2">
+            <label for="inputFirstName" class="form-label mb-0">Nombre</label>
+            <input name="firstName" type="text" class="form-control" id="inputFirstName" pattern="[A-zÀ-ž\s]+" required/>
+            <div class="invalid-feedback mt-0">Ingrese un nombre válido.</div>
+          </div>
+          <div class="col-md-4 pb-2">
+            <label for="inputLastName" class="form-label mb-0">Apellido</label>
+            <input name="lastName" type="text" class="form-control" id="inputLastName" pattern="[A-zÀ-ž\s]+" required/>
+            <div class="invalid-feedback mt-0">Ingrese un apellido válido.</div>
+          </div>
+          <div class="col-md-4 pb-2">
+            <label for="inputBirthday" class="form-label mb-0">Fecha de nacimiento</label>
+            <input name="birthday" type="date" class="form-control" id="inputBirthday" required/>
+            <div class="invalid-feedback mt-0">Ingrese una fecha válida.</div>
+          </div>
+          <div class="col-md-6 pb-2">
+            <label for="inputEmail" class="form-label mb-0">Correo electrónico</label>
+            <input name="email" type="email" class="form-control" id="inputEmail" required/>
+            <div class="invalid-feedback mt-0">Ingrese un correo electrónico válido.</div>
+          </div>
+          <div class="col-md-6 pb-2">
+            <label for="inputRepeatEmail" class="form-label mb-0">Repite tu correo electrónico</label>
+            <input name="repeatEmail" type="email" class="form-control" id="inputRepeatEmail" required/>
+            <div class="invalid-feedback mt-0">El correo electrónico no coincide.</div>
+          </div>
+          <div class="col-md-6 pb-2">
+            <label for="inputPassword" class="form-label mb-0">Contraseña</label>
+            <input name="password" type="password" class="form-control" id="inputPassword" pattern="^(?=.*[A-zÀ-ž])(?=.*[0-9]).{8,}$" required autocomplete="new-password"/>
+            <div class="invalid-feedback mt-0">Debe contener al menos 8 caracteres. Debe contener al menos una letra y un número</div>
+          </div>
+          <div class="col-md-6 pb-2">
+            <label for="inputRepeatPassword" class="form-label mb-0">Repite tu contraseña</label>
+            <input name="repeatPassword" type="password" class="form-control" id="inputRepeatPassword" required autocomplete="new-password"/>
+            <div class="invalid-feedback mt-0">La contraseña no coincide.</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end pb-2">
+          <button id="btnSubmit" type="submit" class="btn btn-primary">
+            <span id="btnSubmitSpinner" class="spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+            <span id="btnSubmitText" >Registrarme</span>
+          </button>
+        </div>
+      </form>
+      <div class="pb-2">
+        <p class="mb-0">¿Ya tienes cuenta?
+          <a href="/login" class="link-underline-primary">Ingresa aquí</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Cuenta creada</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¡Cuenta creada con éxito!
+      </div>
+      <div class="modal-footer">
+        <a href="/login">
+          <button type="button" class="btn btn-primary">Ingresar a mi cuenta</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="/js/logup.js"></script>

@@ -1,18 +1,52 @@
 import { Router } from "express";
 import { __dirname } from "../utils/utils.js";
-import productsApiController from "../controllers/productsApi.controller.js";
+import productsController from "../controllers/products.controller.js";
 import { verifyProductProperties } from "../middlewares/products.middleware.js";
+import {
+  authorizeUser,
+  passportCall,
+} from "../middlewares/sessions.middleware.js";
+import { imgUploader } from "../utils/multer.utils.js";
 
-const router = Router();
+const productsRouter = Router();
 
-router.get("/:pid", productsApiController.getProduct);
+productsRouter.get(
+  "/:pid",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  productsController.getProduct
+);
 
-router.get("/", productsApiController.getProducts);
+productsRouter.get(
+  "/",
+  passportCall("jwt"),
+  authorizeUser(["user", "premium", "admin"]),
+  productsController.getProducts
+);
 
-router.post("/", verifyProductProperties, productsApiController.addProduct);
+productsRouter.post(
+  "/",
+  passportCall("jwt"),
+  authorizeUser(["premium", "admin"]),
+  imgUploader.single("image"),
+  verifyProductProperties,
+  productsController.addProduct
+);
 
-router.put("/:pid", verifyProductProperties, productsApiController.updateProduct);
+productsRouter.put(
+  "/:pid",
+  passportCall("jwt"),
+  authorizeUser(["premium", "admin"]),
+  imgUploader.single("image"),
+  verifyProductProperties,
+  productsController.updateProduct
+);
 
-router.delete("/:pid", productsApiController.deleteProduct);
+productsRouter.delete(
+  "/:pid",
+  passportCall("jwt"),
+  authorizeUser(["premium", "admin"]),
+  productsController.deleteProduct
+);
 
-export default router;
+export default productsRouter;

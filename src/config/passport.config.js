@@ -77,7 +77,7 @@ export const initializePassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          let { firstName, lastName, age } = req.body;
+          let { firstName, lastName, birthday } = req.body;
           if (!username || !password) return done(null, false);
 
           let currentUser = await usersService.getByEmail(username);
@@ -91,7 +91,7 @@ export const initializePassport = () => {
             lastName,
             email: username,
             password: createHash(password),
-            age,
+            birthday,
             role,
             cart: cart._id,
           });

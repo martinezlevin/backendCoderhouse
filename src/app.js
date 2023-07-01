@@ -11,16 +11,20 @@ import swaggerSpecs from "./config/swagger.config.js";
 import { config } from "./config/config.js";
 import { __dirname } from "./utils/utils.js";
 import { initializePassport } from "./config/passport.config.js";
-import { errorMiddleware } from "./middlewares/error.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 import { addLogger } from "./middlewares/logger.middleware.js";
+import { logger } from "./utils/logger.utils.js";
+import {
+  setResContentTypeToApplicationJson,
+  setResContentTypeToTextHtml,
+} from "./middlewares/setRes.middleware.js";
+import { setReqIsView } from "./middlewares/setReq.middleware.js";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
-
-import productsApiController from "./controllers/productsApi.controller.js";
-import messagesController from "./controllers/messages.controller.js";
+import ordersRouter from "./routes/orders.router.js";
 
 const app = express();
 
@@ -47,13 +51,18 @@ app.use(compression());
 
 app.use(addLogger);
 
-app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerSpecs));
+app.use(
+  "/apidocs",
+  swaggerUiExpress.serve,
+  swaggerUiExpress.setup(swaggerSpecs)
+);
 
 app.use(express.static(path.join(__dirname, "../public")));
-app.use("/", viewsRouter);
-app.use("/api/sessions", sessionsRouter);
-app.use("/api/carts", cartsRouter);
-app.use("/api/products", productsRouter);
+app.use("/", setReqIsView, setResContentTypeToTextHtml, viewsRouter);
+app.use("/api/sessions", setResContentTypeToApplicationJson, sessionsRouter);
+app.use("/api/products", setResContentTypeToApplicationJson, productsRouter);
+app.use("/api/carts", setResContentTypeToApplicationJson, cartsRouter);
+app.use("/api/orders", setResContentTypeToApplicationJson, ordersRouter);
 app.use("*", (req, res) => {
   return req.user ? res.redirect("/products") : res.redirect("/login");
 });
@@ -63,28 +72,14 @@ const httpServer = app.listen(config.port, () => {
 });
 const io = new Server(httpServer);
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  logger.info("New client connected");
 
-  socket.on("deleteProduct", async (productId, user) => {
-    let response = await productsApiController.deleteProductSocket(productId, user);
-    socket.emit("deleteProductRes", response);
-    if (response.success) {
-      socket.broadcast.emit("productListUpdated");
-    }
+  socket.on("productsCollectionUpdated", () => {
+    io.emit("productsCollectionUpdated");
   });
-
-  socket.on("addProduct", async (product) => {
-    let response = await productsApiController.addProductSocket(product);
-    socket.emit("addProductRes", response);
-    if (response.success) {
-      socket.broadcast.emit("productListUpdated");
-    }
-  });
-
-  socket.on("newMessage", async ({ user, message }) => {
-    await messagesController.sendMessage({ user, message });
-    io.emit("messagesListUpdated");
+  socket.on("newOrder", () => {
+    socket.broadcast("newOrder");
   });
 });
 
-app.use(errorMiddleware);
+app.use(errorHandler);

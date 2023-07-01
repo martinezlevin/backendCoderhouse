@@ -6,32 +6,33 @@ let toast = document.getElementById("toast");
 
 deleteProductForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  let userdata = await fetch("/api/sessions/current");
-  let parsedUserData = await userdata.json();
-  let user = parsedUserData.result;
   let productId = e.target[0].value.trim();
-  socket.emit("deleteProduct", productId, user);
+  await fetch(`/api/products/${productId}`, { method: "DELETE" });
+  socket.emit("productsCollectionUpdated");
   e.target.reset();
 });
 
 addProductForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  let userdata = await fetch("/api/sessions/current");
-  let parsedUserData = await userdata.json();
-  let user = parsedUserData.result;
-  let product = {
-    title: e.target[0].value.trim(),
-    description: e.target[1].value.trim(),
-    code: e.target[2].value.trim(),
-    price: e.target[3].value.trim(),
-    status: e.target[4].value.trim(),
-    stock: e.target[5].value.trim(),
-    category: e.target[6].value.trim(),
-    thumbnails: [e.target[7].value.trim(), e.target[8].value.trim()],
-    owner: user.id,
-  };
-  socket.emit("addProduct", product);
-  e.target.reset();
+  let formData = new FormData(e.target);
+  await fetch("/api/products/", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => {
+      console.dir(res);
+      if (res.status !== 201) throw new Error;
+      return res.json();
+    })
+    .then((res) => {
+      console.dir(res);
+    })
+    .catch((error => {
+      window.location.replace("/error");
+    }))
+    .finally(() => {
+      socket.emit("productsCollectionUpdated");
+    });
 });
 
 const showToast = (message) => {
@@ -42,26 +43,8 @@ const showToast = (message) => {
   }, 2000);
 };
 
-window.addEventListener("load", () => showToast("Lista actualizada!"));
+showToast("Lista actualizada");
 
-socket.on("productListUpdated", () => {
+socket.on("productsCollectionUpdated", () => {
   location.reload();
-});
-
-socket.on("addProductRes", (response) => {
-  showToast(response.message);
-  if (response.success) {
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
-  }
-});
-
-socket.on("deleteProductRes", (response) => {
-  showToast(response.message);
-  if (response.success) {
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
-  }
 });

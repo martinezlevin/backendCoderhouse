@@ -11,7 +11,7 @@ const swaggerOptions = {
       description: "Documentación completa de la aplicación",
     },
   },
-  apis: [path.join(__dirname, "../docs/**/*.yaml")],
+  apis: [path.join(__dirname, "../docs/*.yaml")],
 };
 
 const swaggerSpecs = swaggerJSDoc(swaggerOptions);

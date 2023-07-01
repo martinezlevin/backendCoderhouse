@@ -12,7 +12,7 @@ const usersSchema = new Schema(
       unique: true,
     },
     password: String,
-    age: Number,
+    birthday: Date,
     role: String,
     github: Boolean,
     githubProfile: Object,
@@ -20,10 +20,6 @@ const usersSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "carts",
     },
-    lastOrder: {
-      type: Number,
-      required: true,
-    }
   },
   {
     timestamps: true,

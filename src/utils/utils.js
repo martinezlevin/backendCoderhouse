@@ -48,6 +48,14 @@ export const createFakeProduct = () => {
   };
 };
 
-export const createFakePass = () => {
-  return faker.string.alphanumeric(8);
-}
+export const createPassword = () => {
+  let randomStr = Math.random().toString(36);
+  randomStr = randomStr.slice(randomStr.length - 8).toUpperCase();
+  return randomStr;
+};
+
+export const createCode = () => {
+  let randomStr = Math.random().toString(36);
+  randomStr = randomStr.slice(randomStr.length - 5).toUpperCase();
+  return randomStr;
+};

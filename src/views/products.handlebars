@@ -1,63 +1,177 @@
-<h1>Home Products</h1>
-<p>Hola, {{user.firstName}}!. Rol: {{user.role}}</p>
-<a id="logOut" href="/api/sessions/logout">Cerrar sesión</a>
-<br />
-<a id="cart" name="{{user.cart}}" href="/carts/{{user.cart}}">Ver carrito</a>
-<hr />
-<form id="paramsForm" action="">
-  <label for="category">Categoría:</label>
-  <select name="category" id="categorySelect">
-    <option value="">Todas</option>
-    <option value="cat_a">cat_a</option>
-    <option value="cat_b">cat_b</option>
-    <option value="cat_c">cat_c</option>
-    <option value="cat_d">cat_d</option>
-  </select>
-  <label for="status">Estado:</label>
-  <select name="status" id="statusSelect">
-    <option value="">Todos</option>
-    <option value="true">Disponible</option>
-    <option value="false">No disponible</option>
-  </select>
-  <label for="sort">Ordenar por precio:</label>
-  <select name="sort" id="sortSelect">
-    <option value="">No ordenar</option>
-    <option value="asc">Ascendente</option>
-    <option value="desc">Descendente</option>
-  </select>
-  <label for="limit">Cantidad por página:</label>
-  <input type="text" id="limitInput" />
-  <label for="page">Página:</label>
-  <input type="text" id="pageInput" />
-</form>
-<a id="goAnchor" href=""><b> Aplicar</b></a>
-<br />
-<br />
-{{#if products.hasPrevPage}}
-  <a id="prev-page-anchor" href="{{products.prevLink}}">Página anterior</a>
-{{/if}}
-{{#if products.hasNextPage}}
-  <a id="next-page-anchor" href="{{products.nextLink}}">Página siguiente</a>
-{{/if}}
-<hr />
-{{#each products.payload}}
-  <div>
-    <h2>Title: {{this.title}}</h2>
-    <p>Category: {{this.category}}</p>
-    <p>Description: {{this.description}}</p>
-    <p>Price: ${{this.price}}</p>
-    {{#if this.status}}
-      <p>Disponible</p>
-      <form class="addToCartForm" id="{{this._id}}" data-owner="{{this.owner}}">
-        <label>Cantidad:
-          <input type="text" name="quantity" class="quantity" />
-        </label>
-        <input type="submit" value="Agregar al carrito" />
-      </form>
-    {{else}}
-      <p>No disponible</p>
-    {{/if}}
-    <hr />
+<nav class="navbar navbar-expand-md bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">HOME</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/products">Menú</a>
+        <a id="cartLink" class="nav-link position-relative me-2 {{#unless cart.totalItems}}disabled{{/unless}}" href="/carts/{{user.cart}}">
+          Mi pedido
+          <span id="cartLinkBadge" class="{{#unless cart.totalItems}}visually-hidden{{/unless}} position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger">
+            {{cart.totalItems}}
+          </span>
+        </a>
+        <span class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mi cuenta: {{user.firstName}}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/profile/{{user._id}}">Mi perfil</a></li>
+            <li><a class="dropdown-item" href="/api/sessions/logout">Cerrar sesión</a></li>
+          </ul>
+        </span>
+        {{#if isManager}}
+          <span class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Gestionar
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/products_manager">Productos</a></li>
+            {{#if isAdmin}}
+              <li><a class="dropdown-item" href="/orders_manager">Pedidos</a></li>
+            {{/if}}
+          </ul>
+        </span>
+        {{/if}}
+      </div>
+    </div>
   </div>
-{{/each}}
+</nav>
+
+<button type="button" class="btn btn-primary fixed-bottom ms-auto me-3 mb-3 shadow" data-bs-toggle="modal" data-bs-target="#exampleModal"  style="width: 75px; height: 38px;">
+  Filtrar
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Filtrar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="paramsForm" class="row gy-2 gx-3 align-items-center">
+          <div class="col-12">
+            <label for="categorySelect">Categoría</label>
+            <select name="category" id="categorySelect" class="form-select">
+              <option value="">Todas</option>
+              <option value="Hamburguesas">Hamburguesas</option>
+              <option value="Lomos">Lomos</option>
+              <option value="Milanesas">Milanesas</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label for="sortSelect">Precio</label>
+            <select name="sort" id="sortSelect" class="form-select">
+              <option value="">No ordenar</option>
+              <option value="asc">Más barato primero</option>
+              <option value="desc">Más costoso primero</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label for="statusSelect">Estado</label>
+            <select name="status" id="statusSelect" class="form-select">
+              <option value="">Todos</option>
+              <option value="true">Disponible</option>
+              {{#if isManager}}
+                <option value="false">No disponible</option>
+              {{/if}}
+            </select>
+          </div>
+          <div class="col-8">
+            <label for="limitSelect">Cantidad por página</label>
+            <select class="form-select" id="limitSelect" name="limit">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <label for="pageSelect">Página</label>
+            <select class="form-select" id="pageSelect" name="page">
+              {{#each possiblePages}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a id="applyFiltersBtn" href="/products/" type="button" class="btn btn-primary">Aplicar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid pt-2">
+  <div class="row justify-content-center gap-3">
+    {{#each products.docs}}
+      <div class="card g-0" style="width: 18rem;">
+        <img src="/images/{{this.thumbnails.[0]}}" class="card-img-top" alt="{{this.title}}">
+        <div class="card-body d-flex flex-column justify-content-between">
+          <h5 class="card-title">{{this.title}}</h5>
+          <p class="card-text">{{this.description}}</p>
+          <p class="card-text"><small class="text-body-secondary">${{this.price}}.-</small></p>
+          <form class="addToCartForm input-group m-0" id="{{this._id}}" data-owner="{{this.owner}}">
+            <button class="btn btn-outline-secondary rounded-start" type="button"><i class="bi bi-dash"></i></button>
+            <input name="quantity" type="text" class="qtyInput form-control text-center" value="1" disabled>
+            <button class="btn btn-outline-secondary rounded-end" type="button"><i class="bi bi-plus"></i></button>
+            <p class="m-0 pt-1 w-100 text-center">
+              <button type="submit" class="btn btn-primary w-100 btnSubmit">
+                <span class="spinner-border spinner-border-sm visually-hidden btnSubmitSpinner" role="status"></span>
+                <span class="btnSubmitText" >Agregar al carrito</span>
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center m-0 pt-2">
+    <li class="page-item {{#unless products.hasPrevPage}}disabled{{/unless}}">
+      <a class="page-link" href="{{products.prevLink}}">Anterior</a>
+    </li>
+    {{#each possiblePages}}
+      <li class="page-item"><a class="page-link pageSelectorBtn" href="/products/?page={{this}}">{{this}}</a></li>
+    {{/each}}
+    <li class="page-item {{#unless products.hasNextPage}}disabled{{/unless}}">
+      <a class="page-link" href="{{products.nextLink}}">Siguiente</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3 mb-5">
+  <div id="liveToast" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div id="toastBody" class="toast-body">
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="staticBackdropBody" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/js/products.js"></script>

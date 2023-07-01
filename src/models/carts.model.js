@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
 
-const cartsCollection = "carts";
+const ordersCollection = "orders";
 
-const cartItemSchema = new Schema({
-  productId: {
+const orderItemSchema = new Schema({
+  product: {
     type: Schema.Types.ObjectId,
     ref: "products",
     required: true,
@@ -14,9 +14,20 @@ const cartItemSchema = new Schema({
   },
 });
 
-const cartsSchema = new Schema({
-  alias: String,
-  products: [cartItemSchema],
-});
+const ordersSchema = new Schema(
+  {
+    code: {
+      type: String,
+      unique: true,
+    },
+    status: String,
+    amount: Number,
+    purchaser: String,
+    products: [orderItemSchema],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export const cartsModel = model(cartsCollection, cartsSchema);
+export const ordersModel = model(ordersCollection, ordersSchema);

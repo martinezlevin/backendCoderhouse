@@ -1,15 +1,94 @@
-<h1>Carts</h1>
-<hr />
-<p>Cart id: {{cart._id}}</p>
-<p>Cart alias: {{cart.alias}}</p>
-<button data-href="/api/carts/{{cart._id}}/purchase" id="sendOrderBtn">Finalizar compra</button>
-<hr />
-{{#each cart.products}}
-  <div>
-    <h2>Title: {{this.productId.title}}</h2>
-    <p>Price: ${{this.productId.price}}</p>
-    <p>Cantidad: {{this.quantity}}</p>
+<nav class="navbar navbar-expand-md bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">JG Sandwiches</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/products">Menú</a>
+        <a id="cartLink" class="nav-link position-relative me-2 {{#unless cart.totalItems}}disabled{{/unless}}" href="/carts/{{user.cart}}">
+          Mi pedido
+          <span id="cartLinkBadge" class="{{#unless cart.totalItems}}visually-hidden{{/unless}} position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger">
+            {{cart.totalItems}}
+          </span>
+        </a>
+        <span class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mi cuenta: {{user.firstName}}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/profile/{{user._id}}">Perfil</a></li>
+            <li><a class="dropdown-item" href="/api/sessions/logout">Cerrar sesión</a></li>
+          </ul>
+        </span>
+        {{#if isManager}}
+          <span class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Gestionar
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/products_manager">Productos</a></li>
+            {{#if isAdmin}}
+              <li><a class="dropdown-item" href="/orders_manager">Compras</a></li>
+            {{/if}}
+          </ul>
+        </span>
+        {{/if}}
+      </div>
+    </div>
   </div>
-  <hr />
-{{/each}}
+</nav>
+
+<div class="container">
+  <h1 id="cart" data-_id="{{cart.[_id]}}" data-totalitems="{{cart.totalItems}}">Mis pedidos</h1>
+  {{#each cart.products}}
+    <div class="alert alert-primary row justify-content-center align-items-center">
+      <div class="col-12 col-sm-5 fs-5">
+        {{this.product.title}}
+      </div>
+      <div class="col-3 col-sm-2 fs-6 text-center">
+        <span class="fs-5">{{this.quantity}}</span> un.
+      </div>
+      <div class="col-3 col-sm-2 fs-6 text-center">
+        Precio: ${{this.product.price}}.-
+      </div>
+      <div class="col-4 col-sm-2 fs-6 text-center">
+        Subtotal: ${{this.subtotal}}.-
+      </div>
+      <div class="col-2 col-sm-1 fs-5 text-center">
+        <a class="btn border-0 text-danger removeItemBtn fs-5" href="" data-_id="{{this.product.[_id]}}">
+          <span class="spinner-border spinner-border-sm visually-hidden removeItemBtnSpinner" role="status"></span>
+          <span class="removeItemBtnText"><i class="bi bi-x-circle" data-_id="{{this.product.[_id]}}"></i></span>
+        </a>
+      </div>
+    </div>
+  {{/each}}
+  <div class="alert alert-warning row justify-content-end align-items-center">
+    <div class="col-12 fs-5 text-end">
+      Total: ${{cart.amount}}.-
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button id="sendOrderBtn" data-href="/api/orders/{{cart._id}}" type="button" class="btn btn-primary">Enviar pedido</button>
+  </div>
+</div>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+        </h1>
+      </div>
+      <div id="staticBackdropBody" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <a id="closeModalBtn" href="/products" type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/js/cart.js"></script>
