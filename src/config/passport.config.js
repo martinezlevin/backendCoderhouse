@@ -17,7 +17,7 @@ export const initializePassport = () => {
     new JwtStrategy(
       {
         jwtFromRequest: ExtractJwt.fromExtractors([extractToken]),
-        secretOrKey: config.secretKey,
+        secretOrKey: 'mi_clave_secreta',
       },
       (jwt_payload, done) => {
         try {

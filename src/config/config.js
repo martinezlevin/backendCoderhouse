@@ -9,7 +9,7 @@ dotenv.config({
 });
 
 export const config = {
-  port: process.env.PORT,
+  port: process.env.PORT || 8080,
   persistence: process.env.PERSISTENCE,
   mongoUrl: process.env.MONGO_URL,
   secretKey: process.env.SECRET_KEY,
