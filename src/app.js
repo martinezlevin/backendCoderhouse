@@ -57,7 +57,7 @@ app.use(
   swaggerUiExpress.setup(swaggerSpecs)
 );
 
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../publics")));
 app.use("/", setReqIsView, setResContentTypeToTextHtml, viewsRouter);
 app.use("/api/sessions", setResContentTypeToApplicationJson, sessionsRouter);
 app.use("/api/products", setResContentTypeToApplicationJson, productsRouter);
